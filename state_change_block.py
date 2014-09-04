@@ -29,7 +29,6 @@ class StateChange(Block):
         super().__init__()
         self._state = None
         self._backup_job = None
-        self._state_lock = Lock()
 
     def configure(self, context):
         super().configure(context)
