@@ -47,22 +47,21 @@ class StateChange(Block):
         self._backup()
 
     def process_signals(self, signals):
-        prev_state = self._state
         for signal in signals:
             try:
-                state = self.state_expr(signal)
-            except:
-                state = prev_state
-            if prev_state is not None and state != prev_state:
+                prev_state = self._state
+                self._state = self.state_expr(signal)
+            except Exception as e:
+                self._logger.error("State Change failed: {}".format(str(e)))
+                self._state = prev_state
+            if prev_state is not None and self._state != prev_state:
                 # notify signal if there was a prev_state and
                 # the state has changed.
                 signal = Signal({
-                    "state": state,
+                    "state": self._state,
                     "prev_state": prev_state
                 })
                 self.notify_signals([signal])
-            prev_state = state
-        self._state = prev_state
 
     def _backup(self):
         ''' Persist the current state using the persistence module.
