@@ -1,11 +1,11 @@
 from ..state_change_block import StateChange
 from nio.util.support.block_test_case import NIOBlockTestCase
 from nio.common.signal.base import Signal
-from nio.modules.threading import Event
 
 
 class StateSignal(Signal):
     def __init__(self, state):
+        super().__init__()
         self.state = state
 
 
