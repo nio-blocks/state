@@ -27,7 +27,6 @@ class StateChangeVolatile(Block):
     def __init__(self):
         super().__init__()
         self._state = None
-        self._prev_state = None
         self._backup_job = None
         self._lock = Lock()
 
