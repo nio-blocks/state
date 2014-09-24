@@ -8,7 +8,7 @@ from nio.modules.threading import Lock
 
 
 @Discoverable(DiscoverableType.block)
-class StateChange(Block):
+class StateChangeVolatile(Block):
     """ Notifies a signal on *state* change.
 
     Maintains a *state*. When *state* changes, a signal is notified
@@ -51,7 +51,7 @@ class StateChange(Block):
 
     def process_signals(self, signals):
         for signal in signals:
-            with self._lock: # we need to make sure that the global variable doesn't change here
+            with self._lock:
                 try:
                     prev_state = self._state
                     self._state = self.state_expr(signal)
@@ -77,3 +77,25 @@ class StateChange(Block):
             self._state
         )
         self.persistence.save()
+        
+ 
+ class StateChange(StateChangeVolatile):
+     def process_signals(self, signals):
+        with self._lock:
+            state = self._state
+            for signal in signals:
+                prev_state = state
+                try:
+                    state = self.state_expr(signal)
+                except:
+                    self._logger.error("State Change failed: {}".format(str(e)))
+                    continue
+                if prev_state is not None and state != prev_state:
+                    # notify signal if there was a prev_state and
+                    # the state has changed.
+                    signal = Signal({
+                        "state": state,
+                        "prev_state": prev_state
+                    })
+                    self.notify_signals([signal])
+            self._state = state
