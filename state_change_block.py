@@ -6,8 +6,6 @@ from nio.metadata.properties.timedelta import TimeDeltaProperty
 from nio.modules.scheduler import Job
 from nio.modules.threading import Lock
 
-
-@Discoverable(DiscoverableType.block)
 class StateChangeVolatile(Block):
     """ Notifies a signal on *state* change.
 
@@ -78,9 +76,9 @@ class StateChangeVolatile(Block):
         )
         self.persistence.save()
         
- 
- class StateChange(StateChangeVolatile):
-     def process_signals(self, signals):
+@Discoverable(DiscoverableType.block)
+class StateChange(StateChangeVolatile):
+    def process_signals(self, signals):
         with self._lock:
             state = self._state
             for signal in signals:
