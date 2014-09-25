@@ -1,6 +1,5 @@
 from nio.common.block.base import Block
 from nio.common.discovery import Discoverable, DiscoverableType
-from nio.modules.threading import Lock
 from nio.metadata.properties.string import StringProperty
 from .state_mixin import StateMixin, NoState
 
