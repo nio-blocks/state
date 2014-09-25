@@ -17,11 +17,11 @@ class Relay(StateMixin, Block):
         signal_list = []
         with self._safe_lock:
             for signal in signals:
-                self._process_state(signal)
+                try:
+                    self._process_state(signal)
+                except:
+                    pass
                 if self._state:
                     signal_list.append(signal)
         self.notify_signals(signal_list)
 
-    def _state_change_error(self, e):
-        # silence errors during state changes that are bad
-        pass

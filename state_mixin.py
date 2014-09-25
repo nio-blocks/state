@@ -45,14 +45,10 @@ class StateMixin(object):
         '''
         with self._state_lock:
             prev_state = self._state
-            try:
-                state = self.state_expr(signal)
-                if state is not NameError:
-                    self._state = state
-                else:
-                    return
-            except Exception as e:
-                self._state_change_error(e)
+            state = self.state_expr(signal)
+            if state is not NameError:
+                self._state = state
+            else:
                 return
             if prev_state is not NoState and self._state != prev_state:
                 # notify signal if there was a prev_state and
@@ -73,5 +69,5 @@ class StateMixin(object):
         )
         self.persistence.save()
 
-    def _state_change_error(self, e):
+    def log_error(self, e):
         self._logger.error("State Change failed: {}".format(str(e)))

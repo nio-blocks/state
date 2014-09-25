@@ -6,7 +6,11 @@ from .state_mixin import StateMixin
 class StateChangeVolatile(StateMixin, Block):
     def process_signals(self, signals):
         for signal in signals:
-            out = self._process_state(signal)
+            try:
+                out = self._process_state(signal)
+            except Exception as e:
+                self.log_error(e)
+                continue
             if out is not None:
                 self.notify_signals([out])
 
@@ -32,7 +36,11 @@ class StateChange(StateMixin, Block):
     def process_signals(self, signals):
         with self._safe_lock:
             for signal in signals:
-                out = self._process_state(signal)
+                try:
+                    out = self._process_state(signal)
+                except Exception as e:
+                    self.log_error(e)
+                    continue
                 if out is not None:
                     self.notify_signals([out])
 

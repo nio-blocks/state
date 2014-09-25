@@ -42,4 +42,5 @@ class TestStateChange(NIOBlockTestCase):
         self.assert_num_signals_notified(2, blk)
         self.assertEqual(self._signals[0].prev_state, '2')
         self.assertEqual(self._signals[0].state, '1')
+
         blk.stop()
