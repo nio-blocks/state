@@ -4,6 +4,10 @@ from nio.metadata.properties.timedelta import TimeDeltaProperty
 from nio.modules.scheduler import Job
 from nio.modules.threading import Lock
 
+# Default starting state
+class NoState(Error):
+    pass
+
 class StateMixin(object):
     """ A block mixin for keeping track of state
     use _process_state with the signal to determine if a state change is necessary"""
@@ -13,7 +17,7 @@ class StateMixin(object):
 
     def __init__(self):
         super().__init__()
-        self._state = None
+        self._state = NoState
         self._backup_job = None
         self._state_lock = Lock()
 
@@ -34,6 +38,11 @@ class StateMixin(object):
         self._backup()
 
     def _process_state(self, signal):
+        '''changes state from signal. If signal cannot be processed, state
+        remains unchanged.
+
+        returns a Signal on successful change. Returns None if state did not change
+        '''
         with self._state_lock:
             prev_state = self._state
             try:
@@ -45,7 +54,7 @@ class StateMixin(object):
             except Exception as e:
                 self._state_change_error(e)
                 return
-            if prev_state is not None and self._state != prev_state:
+            if prev_state is not NoState and self._state != prev_state:
                 # notify signal if there was a prev_state and
                 # the state has changed.
                 signal = Signal({
