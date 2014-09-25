@@ -20,7 +20,7 @@ class StateChangeVolatile(Block):
     This makes is so that setting the initial state does not trigger
     a notification Signal.
     """
-    state_expr = ExpressionProperty(title='State Expression')
+    state_expr = ExpressionProperty(title='State Expression', attr_default=NameError)
     backup_interval = TimeDeltaProperty(title='Backup Interval',
                                         default={'seconds': 600})
 
@@ -48,22 +48,31 @@ class StateChangeVolatile(Block):
 
     def process_signals(self, signals):
         for signal in signals:
-            with self._lock:
-                try:
-                    prev_state = self._state
-                    self._state = self.state_expr(signal)
-                    state = self._state
-                except Exception as e:
-                    self._logger.error("State Change failed: {}".format(str(e)))
-                    continue
-                if prev_state is not None and state != prev_state:
-                    # notify signal if there was a prev_state and
-                    # the state has changed.
-                    signal = Signal({
-                        "state": state,
-                        "prev_state": prev_state
-                    })
-                    self.notify_signals([signal])
+            out = self._process_state(signal)
+            if out is not None:
+                self.notify_signals(out)
+
+    def _process_state(self, signal):
+        with self._lock:
+            prev_state = self._state
+            try:
+                state = self.state_expr(signal)
+                if state is not NameError:
+                    self._state = state
+                else:
+                    print("Got Default!")
+                    return
+            except Exception as e:
+                self._state_change_error(e)
+                return
+            if prev_state is not None and self._state != prev_state:
+                # notify signal if there was a prev_state and
+                # the state has changed.
+                signal = Signal({
+                    "state": self._state,
+                    "prev_state": prev_state
+                })
+                return [signal]
 
     def _backup(self):
         ''' Persist the current state using the persistence module.
@@ -74,25 +83,22 @@ class StateChangeVolatile(Block):
             self._state
         )
         self.persistence.save()
-        
+
+    def _state_change_error(self, e):
+        self._logger.error("State Change failed: {}".format(str(e)))
+
+
 @Discoverable(DiscoverableType.block)
 class StateChange(StateChangeVolatile):
+    def __init__(self):
+        super().__init__()
+        self._safe_lock = Lock()
+
     def process_signals(self, signals):
-        with self._lock:
-            state = self._state
+        with self._safe_lock:
             for signal in signals:
-                prev_state = state
-                try:
-                    state = self.state_expr(signal)
-                except:
-                    self._logger.error("State Change failed: {}".format(str(e)))
-                    continue
-                if prev_state is not None and state != prev_state:
-                    # notify signal if there was a prev_state and
-                    # the state has changed.
-                    signal = Signal({
-                        "state": state,
-                        "prev_state": prev_state
-                    })
-                    self.notify_signals([signal])
-            self._state = state
+                out = self._process_state(signal)
+                if out is not None:
+                    self.notify_signals(out)
+
+
