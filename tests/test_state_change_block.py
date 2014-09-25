@@ -15,6 +15,7 @@ class TestStateChange(NIOBlockTestCase):
         self._signals = signals
 
     def test_state_change(self):
+        print("Testing StateChange")
         blk = StateChange()
         config = {
             "state_expr": "{{$state}}",

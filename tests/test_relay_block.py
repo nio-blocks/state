@@ -1,6 +1,6 @@
-from ..relay_block import Relay
 from nio.util.support.block_test_case import NIOBlockTestCase
 from nio.common.signal.base import Signal
+from ..relay_block import Relay
 
 class StateSignal(Signal):
     def __init__(self, state):
@@ -16,7 +16,8 @@ class TestRelay(NIOBlockTestCase):
     def signals_notified(self, signals):
         self._signals = signals
 
-    def test_state_change(self):
+    def test_relay(self):
+        print("Testing Relay")
         blk = Relay()
         config = {
             "state_expr": "{{$state}}"  # This should work but there is a bug with state_expressions

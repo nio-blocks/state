@@ -41,7 +41,6 @@ class StateMixin(object):
                 if state is not NameError:
                     self._state = state
                 else:
-                    print("Got Default!")
                     return
             except Exception as e:
                 self._state_change_error(e)
