@@ -8,7 +8,7 @@ class StateChangeVolatile(StateMixin, Block):
         for signal in signals:
             out = self._process_state(signal)
             if out is not None:
-                self.notify_signals(out)
+                self.notify_signals([out])
 
 @Discoverable(DiscoverableType.block)
 class StateChange(StateMixin, Block):
@@ -34,6 +34,6 @@ class StateChange(StateMixin, Block):
             for signal in signals:
                 out = self._process_state(signal)
                 if out is not None:
-                    self.notify_signals(out)
+                    self.notify_signals([out])
 
 

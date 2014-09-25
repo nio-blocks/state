@@ -61,7 +61,7 @@ class StateMixin(object):
                     "state": self._state,
                     "prev_state": prev_state
                 })
-                return [signal]
+                return signal
 
     def _backup(self):
         ''' Persist the current state using the persistence module.
