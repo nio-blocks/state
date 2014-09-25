@@ -22,6 +22,6 @@ class Relay(StateMixin, Block):
                     signal_list.append(signal)
         self.notify_signals(signal_list)
 
-    #def _state_change_error(self, e):
-        ## silence errors during state changes that are bad
-        #pass
+    def _state_change_error(self, e):
+        # silence errors during state changes that are bad
+        pass

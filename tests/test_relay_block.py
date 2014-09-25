@@ -20,8 +20,7 @@ class TestRelay(NIOBlockTestCase):
         print("Testing Relay")
         blk = Relay()
         config = {
-            "state_expr": "{{$state}}"  # This should work but there is a bug with state_expressions
-            # "state_expr": "{{$state if hasattr($, 'state') else 1/0}}",
+            "state_expr": "{{$state}}"
         }
         self.configure_block(blk, config)
         blk.start()
@@ -34,16 +33,12 @@ class TestRelay(NIOBlockTestCase):
         self.assertEqual(self._signals[0].state, '1')
         signals_notified += 1
         self.assert_num_signals_notified(signals_notified, blk)
-        # send a true state + other signal and get both of them
 
-        # Ok, couple of problems. If these two are switched, _state is set to ''
-        # This points to the self.state_expr returning a value even if there is
-        # not the proper attribute in the signal!
+        # send a true state + other signal and get both of them
         blk.process_signals([StateSignal('2'), OtherSignal('3')])
         signals_notified += 2
-        self.assertEqual(blk._state, '2')
-
         self.assert_num_signals_notified(signals_notified, blk)
+        self.assertEqual(blk._state, '2')
         self.assertEqual(self._signals[0].state, '2')
         self.assertEqual(self._signals[1].other, '3')
 
@@ -51,9 +46,15 @@ class TestRelay(NIOBlockTestCase):
         blk.process_signals([StateSignal(False), OtherSignal('4')])
         self.assertEqual(blk._state, False)
         self.assert_num_signals_notified(signals_notified, blk)
+        self.assertEqual(len(self._signals), 0)
+
+        # no signals still pass through
+        blk.process_signals([OtherSignal(n) for n in range(100)])
+        self.assertEqual(blk._state, False)
+        self.assert_num_signals_notified(signals_notified, blk)
+        self.assertEqual(len(self._signals), 0)
 
         # set state to 1 and get notification signal.
-        # this is where it is currently failing because there is no signal!
         blk.process_signals([StateSignal('1'), OtherSignal('5')])
         signals_notified += 2
         self.assert_num_signals_notified(signals_notified, blk)
