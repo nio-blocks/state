@@ -5,7 +5,7 @@ from nio.modules.scheduler import Job
 from nio.modules.threading import Lock
 
 # Default starting state
-class NoState(Error):
+class NoState(Exception):
     pass
 
 class StateMixin(object):

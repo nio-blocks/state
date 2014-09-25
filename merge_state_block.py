@@ -1,6 +1,7 @@
 from nio.common.block.base import Block
 from nio.common.discovery import Discoverable, DiscoverableType
 from nio.modules.threading import Lock
+from nio.metadata.properties.string import StringProperty
 from .state_mixin import StateMixin, NoState
 
 
@@ -24,7 +25,7 @@ class MergeState(StateMixin, Block):
                 self._process_state(signal)
                 if self._state is not NoState:
                     setattr(signal, self.state_name, self._state)
-                    self.signal_list.append(signal)
+                    signal_list.append(signal)
         self.notify_signals(signal_list)
 
     def _state_change_error(self, e):
