@@ -15,6 +15,7 @@ class TestStateChange(NIOBlockTestCase):
         self._signals = signals
 
     def test_state_change(self):
+        print("Testing StateChange")
         blk = StateChange()
         config = {
             "state_expr": "{{$state}}",
@@ -41,4 +42,5 @@ class TestStateChange(NIOBlockTestCase):
         self.assert_num_signals_notified(2, blk)
         self.assertEqual(self._signals[0].prev_state, '2')
         self.assertEqual(self._signals[0].state, '1')
+
         blk.stop()
