@@ -27,24 +27,28 @@ class TestRelay(NIOBlockTestCase):
 
         signals_notified = 0
 
-        # send a true state, expect to receive it
+        # state is initally False
+        print(blk._state)
+        self.assertFalse(bool(blk._state))
+
+        # set state to True
         blk.process_signals([StateSignal('1')])
         self.assertEqual(blk._state, '1')
-        self.assertEqual(self._signals[0].state, '1')
-        signals_notified += 1
+        self.assertTrue(bool(blk._state))
         self.assert_num_signals_notified(signals_notified, blk)
 
-        # send a true state + other signal and get both of them
+        # send a true state + other signal
         blk.process_signals([StateSignal('2'), OtherSignal('3')])
-        signals_notified += 2
+        signals_notified += 1
         self.assert_num_signals_notified(signals_notified, blk)
         self.assertEqual(blk._state, '2')
-        self.assertEqual(self._signals[0].state, '2')
-        self.assertEqual(self._signals[1].other, '3')
+        self.assertTrue(bool(blk._state))
+        self.assertEqual(self._signals[0].other, '3')
 
         # no signals pass through when State is false
         blk.process_signals([StateSignal(False), OtherSignal('4')])
         self.assertEqual(blk._state, False)
+        self.assertFalse(bool(blk._state))
         self.assert_num_signals_notified(signals_notified, blk)
         self.assertEqual(len(self._signals), 0)
 
@@ -56,9 +60,9 @@ class TestRelay(NIOBlockTestCase):
 
         # set state to 1 and get notification signal.
         blk.process_signals([StateSignal('1'), OtherSignal('5')])
-        signals_notified += 2
+        signals_notified += 1
         self.assert_num_signals_notified(signals_notified, blk)
         self.assertEqual(blk._state, '1')
-        self.assertEqual(self._signals[0].state, '1')
-        self.assertEqual(self._signals[1].other, '5')
+        self.assertTrue(bool(blk._state))
+        self.assertEqual(self._signals[0].other, '5')
         blk.stop()

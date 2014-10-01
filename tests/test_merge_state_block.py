@@ -17,7 +17,6 @@ class TestMergeState(NIOBlockTestCase):
         self._signals = signals
 
     def test_merge_state(self):
-        print("Testing MergeState")
         blk = MergeState()
         config = {
             "state_expr": "{{$state}}",
@@ -28,21 +27,17 @@ class TestMergeState(NIOBlockTestCase):
 
         signals_notified = 0
 
-        # send state, expect to receive it
+        # set state
         blk.process_signals([StateSignal('1')])
         self.assertEqual(blk._state, '1')
-        self.assertEqual(self._signals[0].mstate, '1')
-        signals_notified += 1
         self.assert_num_signals_notified(signals_notified, blk)
 
-        # send state + other signal and get both of them with an mstate on
+        # set state + other signal
         blk.process_signals([StateSignal('2'), OtherSignal('3')])
-        signals_notified += 2
+        signals_notified += 1
         self.assert_num_signals_notified(signals_notified, blk)
         self.assertEqual(blk._state, '2')
         self.assertEqual(self._signals[0].mstate, '2')
-        self.assertEqual(self._signals[1].mstate, '2')
-        self.assertEqual(self._signals[1].other, '3')
 
         # Just sending other signals pass through and have mstates of '2'
         blk.process_signals([OtherSignal(n) for n in range(100)])

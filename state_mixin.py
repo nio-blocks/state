@@ -11,7 +11,7 @@ class NoState(Exception):
 class StateMixin(object):
     """ A block mixin for keeping track of state
     use _process_state with the signal to determine if a state change is necessary"""
-    state_expr = ExpressionProperty(title='State Expression', attr_default=NameError)
+    state_expr = ExpressionProperty(title='State Expression', default='{{$state}}')
     backup_interval = TimeDeltaProperty(title='Backup Interval',
                                         default={'seconds': 600})
 
@@ -45,14 +45,17 @@ class StateMixin(object):
         '''
         with self._state_lock:
             prev_state = self._state
-            state = self.state_expr(signal)
-            if state is not NameError:
-                self._state = state
-            else:
-                return
+            try:
+                self._state = self.state_expr(signal)
+            except Exception as e:
+                # expression failed so don't set a state.
+                self._logger.error("State Change failed: {}".format(str(e)))
             if prev_state is not NoState and self._state != prev_state:
                 # notify signal if there was a prev_state and
                 # the state has changed.
+                self._logger.debug( "Changing state from {} to {}".format(
+                    prev_state, self._state
+                ))
                 signal = Signal({
                     "state": self._state,
                     "prev_state": prev_state
@@ -68,6 +71,3 @@ class StateMixin(object):
             self._state
         )
         self.persistence.save()
-
-    def log_error(self, e):
-        self._logger.error("State Change failed: {}".format(str(e)))

@@ -34,6 +34,8 @@ Relay
 
 Maintains a *state*
 
+If *state_sig* evaluates to True, then it is used to set the *state*. Else, the signal is notified if *state* is True.
+
 - When *state* is True, signals can pass through
 - When *state* is False, signals are blocked
 
@@ -41,6 +43,7 @@ Properies
 ---------
 
 -   **state_expr**: Expression property that evalues to *state*. If the expression cannot be evaluated, the *state* will not change.
+-   **state_sig**: If True, signal is used to set *state*. Else, the signal is notified if *state* is True.
 -   **backup_interval** (seconds=600): Inteval at which *state* is saved to disk.
 
 Dependencies
@@ -57,7 +60,7 @@ Any list of signals Signals will be passed through if bool(*state*) == True, els
 
 Output
 ------
-When *state* is True, all signals are output
+When *state* is True, signals are output
 
 When *state* is False, no signals are output
 
@@ -66,12 +69,13 @@ When *state* is False, no signals are output
 MergeState
 ============
 
-Maintains a *state* and merges that state (with name **state_name**) with every signal that passes through
+Maintains a *state* and merges that state (with name **state_name**) with signals that passes through
 
 Properies
 ---------
 
 -   **state_expr**: Expression property that evalues to *state*. If the expression cannot be evaluated, the *state* will not change.
+-   **state_sig**: If True, signal is used to set *state*. Else, the signal is notified and *state* is assigned to the attribute *state_name*.
 -   **state_name**: String property that is the name of the appended *state*
 -   **backup_interval** (seconds=600): Inteval at which *state* is saved to disk.
 
@@ -87,8 +91,6 @@ Input
 -----
 Any list of signals. Signals that evaluate through **state_expr** to change *state* will do so.
 
-**All** signals will be passed through with *state* appended to them (including signals that are evaluated)
-
 Output
 ------
-Every signal is passed through with **state_name**: *state* merged on.
+Non state setting signals are passed through with *state* set to the attribue **state_name**.

@@ -36,12 +36,6 @@ class StateChange(StateMixin, Block):
     def process_signals(self, signals):
         with self._safe_lock:
             for signal in signals:
-                try:
-                    out = self._process_state(signal)
-                except Exception as e:
-                    self.log_error(e)
-                    continue
+                out = self._process_state(signal)
                 if out is not None:
                     self.notify_signals([out])
-
-
