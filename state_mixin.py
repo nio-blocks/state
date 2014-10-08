@@ -37,7 +37,7 @@ class StateMixin(object):
         self._backup_job.cancel()
         self._backup()
 
-    def _process_state(self, signal):
+    def _process_state(self, signal, exclude = True):
         '''changes state from signal. If signal cannot be processed, state
         remains unchanged.
 
@@ -56,10 +56,10 @@ class StateMixin(object):
                 self._logger.debug( "Changing state from {} to {}".format(
                     prev_state, self._state
                 ))
-                signal = Signal({
-                    "state": self._state,
-                    "prev_state": prev_state
-                })
+                if exclude:
+                    signal = Signal()
+                setattr(signal, "state", self._state)
+                setattr(signal, "prev_state", prev_state)
                 return signal
 
     def _backup(self):

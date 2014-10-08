@@ -1,6 +1,7 @@
 from nio.common.block.base import Block
 from nio.common.discovery import Discoverable, DiscoverableType
 from nio.modules.threading import Lock
+from nio.metadata.properties.bool import BoolProperty
 from .state_mixin import StateMixin
 
 class StateChangeVolatile(StateMixin, Block):
@@ -29,6 +30,9 @@ class StateChange(StateMixin, Block):
     This makes is so that setting the initial state does not trigger
     a notification Signal.
     """
+
+    exclude = BoolProperty(default=True, title = "Exclude Existing Fields")
+
     def __init__(self):
         super().__init__()
         self._safe_lock = Lock()
@@ -36,6 +40,6 @@ class StateChange(StateMixin, Block):
     def process_signals(self, signals):
         with self._safe_lock:
             for signal in signals:
-                out = self._process_state(signal)
+                out = self._process_state(signal, self.exclude)
                 if out is not None:
                     self.notify_signals([out])
