@@ -1,6 +1,7 @@
 from nio.common.signal.base import Signal
 from nio.metadata.properties.expression import ExpressionProperty
 from nio.metadata.properties.timedelta import TimeDeltaProperty
+from nio.metadata.properties.bool import BoolProperty
 from nio.modules.scheduler import Job
 from nio.modules.threading import Lock
 
@@ -14,6 +15,9 @@ class StateMixin(object):
     state_expr = ExpressionProperty(title='State Expression', default='{{$state}}')
     backup_interval = TimeDeltaProperty(title='Backup Interval',
                                         default={'seconds': 600})
+    use_persistence = BoolProperty(title="Use Persistence", default=True,
+            visible=False)
+
 
     def __init__(self):
         super().__init__()
@@ -23,7 +27,8 @@ class StateMixin(object):
 
     def configure(self, context):
         super().configure(context)
-        self._state = self.persistence.load('state') or self._state
+        if self.use_persistence:
+            self._state = self.persistence.load('state') or self._state
 
     def start(self):
         super().start()

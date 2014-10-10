@@ -32,6 +32,8 @@ class StateChange(StateMixin, Block):
     """
 
     exclude = BoolProperty(default=True, title = "Exclude Existing Fields")
+    use_persistence = BoolProperty(title="Use Persistence", default=True,
+            visible=True)
 
     def __init__(self):
         super().__init__()

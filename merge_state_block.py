@@ -1,6 +1,7 @@
 from nio.common.block.base import Block
 from nio.common.discovery import Discoverable, DiscoverableType
 from nio.metadata.properties.expression import ExpressionProperty
+from nio.metadata.properties.bool import BoolProperty
 from nio.metadata.properties.string import StringProperty
 from .state_mixin import StateMixin, NoState
 
@@ -17,6 +18,8 @@ class MergeState(StateMixin, Block):
     state_name = StringProperty(default='state', title="State Name")
     state_sig = ExpressionProperty(title="Is State Signal",
                                    default="{{hasattr($, 'state')}}")
+    use_persistence = BoolProperty(title="Use Persistence", default=False,
+            visible=False)
 
     def process_signals(self, signals):
         signal_list = []

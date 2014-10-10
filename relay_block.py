@@ -1,6 +1,7 @@
 from nio.common.block.base import Block
 from nio.common.discovery import Discoverable, DiscoverableType
 from nio.metadata.properties.expression import ExpressionProperty
+from nio.metadata.properties.bool import BoolProperty
 from nio.modules.threading import Lock
 from .state_mixin import StateMixin
 
@@ -17,6 +18,8 @@ class Relay(StateMixin, Block):
     state_sig = ExpressionProperty(title="Is State Signal",
                                    default="{{hasattr($, 'state')}}")
 
+    use_persistence = BoolProperty(title="Use Persistence", default=False,
+            visible=False)
     def __init__(self):
         super().__init__()
         self._state = False
