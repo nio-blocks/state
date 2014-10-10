@@ -9,6 +9,7 @@ Properies
 ---------
 
 -   **state_expr**: Expression property that evalues to *state*. If the expression cannot be evaluated, the *state* will not change.
+-   **exclude**: Select whether you want to exclude other signals. If checked, the only output will be *state* and *prev_state*. If not checked, *state* and *prev_state* will be appended onto the incomming signal.
 -   **backup_interval** (seconds=600): Inteval at which *state* is saved to disk.
 
 Dependencies
