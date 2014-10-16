@@ -20,7 +20,7 @@ class Relay(StateMixin, Block):
     def __init__(self):
         super().__init__()
         self._safe_lock = Lock()
-       
+
     def configure(self, context):
         super().configure(context)
         self._state = False # deletes persistence. Makes sure _state starts as False
@@ -45,5 +45,5 @@ class Relay(StateMixin, Block):
                         signal_list.append(signal)
                     else:
                         self._logger.debug("State is False")
-        self.notify_signals(signal_list)
-
+        if signal_list:
+            self.notify_signals(signal_list)

@@ -44,4 +44,5 @@ class MergeState(StateMixin, Block):
                     self._logger.debug(
                         "State assigned to None as it has not been set yet"
                     )
-        self.notify_signals(signal_list)
+        if signal_list:
+            self.notify_signals(signal_list)
