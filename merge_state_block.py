@@ -42,9 +42,10 @@ class MergeState(StateMixin, Block):
                     setattr(signal, self.state_name, self._state)
                     signal_list.append(signal)
                 else:
-                    setattr(signal, self.state_name, None)
                     signal_list.append(signal)
                     self._logger.debug(
-                        "State assigned to None as it has not been set yet"
+                        "Attribute '{}' not assigned since state is "
+                        "not yet set".format(self.state_name)
                     )
-        self.notify_signals(signal_list)
+        if signal_list:
+            self.notify_signals(signal_list)

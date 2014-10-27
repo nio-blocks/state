@@ -3,7 +3,7 @@ from nio.common.discovery import Discoverable, DiscoverableType
 from nio.metadata.properties.expression import ExpressionProperty
 from nio.metadata.properties.bool import BoolProperty
 from nio.modules.threading import Lock
-from .state_mixin import StateMixin
+from .state_mixin import StateMixin, NoState
 
 @Discoverable(DiscoverableType.block)
 class Relay(StateMixin, Block):
@@ -22,8 +22,11 @@ class Relay(StateMixin, Block):
             visible=False)
     def __init__(self):
         super().__init__()
-        self._state = False
         self._safe_lock = Lock()
+
+    def configure(self, context):
+        super().configure(context)
+        self._state = False # deletes persistence. Makes sure _state starts as False
 
     def process_signals(self, signals):
         signal_list = []
@@ -45,5 +48,5 @@ class Relay(StateMixin, Block):
                         signal_list.append(signal)
                     else:
                         self._logger.debug("State is False")
-        self.notify_signals(signal_list)
-
+        if signal_list:
+            self.notify_signals(signal_list)
