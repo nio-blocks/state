@@ -48,5 +48,6 @@ class Relay(StateMixin, Block):
                         signal_list.append(signal)
                     else:
                         self._logger.debug("State is False")
+
         if signal_list:
             self.notify_signals(signal_list)

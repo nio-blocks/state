@@ -2,15 +2,18 @@ from nio.util.support.block_test_case import NIOBlockTestCase
 from nio.common.signal.base import Signal
 from ..relay_block import Relay
 
+
 class StateSignal(Signal):
     def __init__(self, state):
         super().__init__()
         self.state = state
 
+
 class OtherSignal(Signal):
     def __init__(self, state):
         super().__init__()
         self.other = state
+
 
 class TestRelay(NIOBlockTestCase):
     def signals_notified(self, signals):
@@ -47,16 +50,13 @@ class TestRelay(NIOBlockTestCase):
 
         # no signals pass through when State is false
         blk.process_signals([StateSignal(False), OtherSignal('4')])
-        self.assertEqual(blk._state, False)
         self.assertFalse(bool(blk._state))
         self.assert_num_signals_notified(signals_notified, blk)
-        self.assertEqual(len(self._signals), 0)
 
         # no signals still pass through
         blk.process_signals([OtherSignal(n) for n in range(100)])
         self.assertEqual(blk._state, False)
         self.assert_num_signals_notified(signals_notified, blk)
-        self.assertEqual(len(self._signals), 0)
 
         # set state to 1 and get notification signal.
         blk.process_signals([StateSignal('1'), OtherSignal('5')])
