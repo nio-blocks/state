@@ -17,12 +17,14 @@ class OtherSignal(Signal):
 
 
 class TestRelay(NIOBlockTestCase):
+    def get_test_modules(self):
+        return self.ServiceDefaultModules + ['persistence']
+
     def signals_notified(self, signals):
         self._signals = signals
 
-    @patch.object(Relay, '_load')
     @patch.object(Relay, '_backup')
-    def test_relay(self, mock_backup, mock_load):
+    def test_relay(self, mock_backup):
         print("Testing Relay")
         blk = Relay()
         config = {

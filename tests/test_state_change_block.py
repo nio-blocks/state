@@ -11,13 +11,14 @@ class StateSignal(Signal):
 
 
 class TestStateChange(NIOBlockTestCase):
+    def get_test_modules(self):
+        return self.ServiceDefaultModules + ['persistence']
 
     def signals_notified(self, signals):
         self._signals = signals
 
-    @patch.object(StateChange, '_load')
     @patch.object(StateChange, '_backup')
-    def test_state_change(self, mock_backup, mock_load):
+    def test_state_change(self, mock_backup):
         blk = StateChange()
         config = {
             "state_expr": "{{$state}}",

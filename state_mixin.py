@@ -28,8 +28,7 @@ class StateMixin(object):
     def configure(self, context):
         super().configure(context)
         if self.use_persistence:
-            self._load()
-            self._state = self._load() or self._state
+            self._state = self.persistence.load('state') or self._state
 
     def start(self):
         super().start()
@@ -67,9 +66,6 @@ class StateMixin(object):
                 setattr(signal, "state", self._state)
                 setattr(signal, "prev_state", prev_state)
                 return signal
-
-    def _load(self):
-        self.persistence.load('state')
 
     def _backup(self):
         ''' Persist the current state using the persistence module.

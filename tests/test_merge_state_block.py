@@ -17,12 +17,14 @@ class OtherSignal(Signal):
 
 
 class TestMergeState(NIOBlockTestCase):
+    def get_test_modules(self):
+        return self.ServiceDefaultModules + ['persistence']
+
     def signals_notified(self, signals):
         self._signals = signals
 
-    @patch.object(MergeState, '_load')
     @patch.object(MergeState, '_backup')
-    def test_merge_state(self, mock_backup, mock_load):
+    def test_merge_state(self, mock_backup):
         blk = MergeState()
         config = {
             "state_expr": "{{$state}}",

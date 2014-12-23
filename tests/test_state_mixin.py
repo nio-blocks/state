@@ -19,10 +19,11 @@ class StateSignal(Signal):
 
 
 class TestStateMixin(NIOBlockTestCase):
+    def get_test_modules(self):
+        return self.ServiceDefaultModules + ['persistence']
 
-    @patch.object(StateMixin, '_load')
     @patch.object(StateMixin, '_backup')
-    def test_state_change(self, mock_backup, mock_load):
+    def test_state_change(self, mock_backup):
         blk = StateBlock()
         blk.state_expr = '{{$state}}'
         self.assertEqual(NoState, blk._state)
@@ -36,13 +37,10 @@ class TestStateMixin(NIOBlockTestCase):
         blk._process_state(Signal())
         self.assertEqual('', blk._state)
 
-    @patch.object(StateMixin, '_load')
     @patch.object(StateMixin, '_backup')
-    def test_bad_expr(self, mock_backup, mock_load):
+    def test_bad_expr(self, mock_backup):
         blk = StateBlock()
         blk.state_expr = '{{$state + 1}}'
         self.assertEqual(NoState, blk._state)
         blk._process_state(StateSignal('hello'))
         self.assertEqual(NoState, blk._state)
-
-
