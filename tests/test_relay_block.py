@@ -1,3 +1,4 @@
+from unittest.mock import patch
 from nio.util.support.block_test_case import NIOBlockTestCase
 from nio.common.signal.base import Signal
 from ..relay_block import Relay
@@ -19,7 +20,9 @@ class TestRelay(NIOBlockTestCase):
     def signals_notified(self, signals):
         self._signals = signals
 
-    def test_relay(self):
+    @patch.object(Relay, '_load')
+    @patch.object(Relay, '_backup')
+    def test_relay(self, mock_backup, mock_load):
         print("Testing Relay")
         blk = Relay()
         config = {

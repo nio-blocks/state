@@ -1,3 +1,4 @@
+from unittest.mock import patch
 from ..state_change_block import StateChange
 from nio.util.support.block_test_case import NIOBlockTestCase
 from nio.common.signal.base import Signal
@@ -14,7 +15,9 @@ class TestStateChange(NIOBlockTestCase):
     def signals_notified(self, signals):
         self._signals = signals
 
-    def test_state_change(self):
+    @patch.object(StateChange, '_load')
+    @patch.object(StateChange, '_backup')
+    def test_state_change(self, mock_backup, mock_load):
         blk = StateChange()
         config = {
             "state_expr": "{{$state}}",
