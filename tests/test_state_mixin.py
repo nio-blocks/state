@@ -1,3 +1,4 @@
+from unittest.mock import patch
 from ..state_mixin import StateMixin, NoState
 from nio.common.block.base import Block
 from nio.common.signal.base import Signal
@@ -18,8 +19,11 @@ class StateSignal(Signal):
 
 
 class TestStateMixin(NIOBlockTestCase):
+    def get_test_modules(self):
+        return self.ServiceDefaultModules + ['persistence']
 
-    def test_state_change(self):
+    @patch.object(StateMixin, '_backup')
+    def test_state_change(self, mock_backup):
         blk = StateBlock()
         blk.state_expr = '{{$state}}'
         self.assertEqual(NoState, blk._state)
@@ -33,11 +37,10 @@ class TestStateMixin(NIOBlockTestCase):
         blk._process_state(Signal())
         self.assertEqual('', blk._state)
 
-    def test_bad_expr(self):
+    @patch.object(StateMixin, '_backup')
+    def test_bad_expr(self, mock_backup):
         blk = StateBlock()
         blk.state_expr = '{{$state + 1}}'
         self.assertEqual(NoState, blk._state)
         blk._process_state(StateSignal('hello'))
         self.assertEqual(NoState, blk._state)
-
-

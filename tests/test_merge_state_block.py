@@ -1,22 +1,30 @@
+from unittest.mock import patch
 from nio.util.support.block_test_case import NIOBlockTestCase
 from nio.common.signal.base import Signal
 from ..merge_state_block import MergeState
+
 
 class StateSignal(Signal):
     def __init__(self, state):
         super().__init__()
         self.state = state
 
+
 class OtherSignal(Signal):
     def __init__(self, state):
         super().__init__()
         self.other = state
 
+
 class TestMergeState(NIOBlockTestCase):
+    def get_test_modules(self):
+        return self.ServiceDefaultModules + ['persistence']
+
     def signals_notified(self, signals):
         self._signals = signals
 
-    def test_merge_state(self):
+    @patch.object(MergeState, '_backup')
+    def test_merge_state(self, mock_backup):
         blk = MergeState()
         config = {
             "state_expr": "{{$state}}",

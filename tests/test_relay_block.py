@@ -1,3 +1,4 @@
+from unittest.mock import patch
 from nio.util.support.block_test_case import NIOBlockTestCase
 from nio.common.signal.base import Signal
 from ..relay_block import Relay
@@ -16,10 +17,14 @@ class OtherSignal(Signal):
 
 
 class TestRelay(NIOBlockTestCase):
+    def get_test_modules(self):
+        return self.ServiceDefaultModules + ['persistence']
+
     def signals_notified(self, signals):
         self._signals = signals
 
-    def test_relay(self):
+    @patch.object(Relay, '_backup')
+    def test_relay(self, mock_backup):
         print("Testing Relay")
         blk = Relay()
         config = {
