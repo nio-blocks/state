@@ -20,7 +20,7 @@ class TestRelay(NIOBlockTestCase):
     def get_test_modules(self):
         return self.ServiceDefaultModules + ['persistence']
 
-    def signals_notified(self, signals):
+    def signals_notified(self, signals, output_id='default'):
         self._signals = signals
 
     @patch.object(Relay, '_backup')
