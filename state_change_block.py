@@ -1,10 +1,11 @@
-from nio.common.block.base import Block
+from .state_change_base_block import StateChangeBase
 from nio.common.discovery import Discoverable, DiscoverableType
 from nio.modules.threading import Lock
 from nio.metadata.properties.bool import BoolProperty
-from .state_mixin import StateMixin
 
-class StateChangeVolatile(StateMixin, Block):
+
+# NB: This is not discoverable. Is it needed?
+class StateChangeVolatile(StateChangeBase):
     def process_signals(self, signals):
         for signal in signals:
             try:
@@ -14,9 +15,10 @@ class StateChangeVolatile(StateMixin, Block):
                 continue
             if out is not None:
                 self.notify_signals([out])
+                
 
 @Discoverable(DiscoverableType.block)
-class StateChange(StateMixin, Block):
+class StateChange(StateChangeBase):
     """ Notifies a signal on *state* change.
 
     Maintains a *state*. When *state* changes, a signal is notified

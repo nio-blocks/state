@@ -1,12 +1,11 @@
-from nio.common.block.base import Block
+from .state_change_base_block import StateChangeBase, NoState
 from nio.common.discovery import Discoverable, DiscoverableType
 from nio.metadata.properties.expression import ExpressionProperty
 from nio.metadata.properties.bool import BoolProperty
 from nio.modules.threading import Lock
-from .state_mixin import StateMixin, NoState
 
 @Discoverable(DiscoverableType.block)
-class Relay(StateMixin, Block):
+class Relay(StateChangeBase):
     '''
     If *state_sig* evaluates to True then the signal sets the state according
     to *state_expr*. Else, the signal gets notified if the state is True.
