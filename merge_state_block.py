@@ -1,13 +1,12 @@
-from nio.common.block.base import Block
+from .state_change_base_block import StateChangeBase, NoState
 from nio.common.discovery import Discoverable, DiscoverableType
 from nio.metadata.properties.expression import ExpressionProperty
 from nio.metadata.properties.bool import BoolProperty
 from nio.metadata.properties.string import StringProperty
-from .state_mixin import StateMixin, NoState
 
 
 @Discoverable(DiscoverableType.block)
-class MergeState(StateMixin, Block):
+class MergeState(StateChangeBase):
     '''
     If *state_sig* evaluates to True then the signal sets the state according
     to *state_expr*. Else, the signal gets assigned the state to the attribute

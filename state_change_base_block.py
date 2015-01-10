@@ -1,4 +1,6 @@
 from nio.common.signal.base import Signal
+from nio.common.block.base import Block
+from nio.common.command import command
 from nio.metadata.properties.expression import ExpressionProperty
 from nio.metadata.properties.timedelta import TimeDeltaProperty
 from nio.metadata.properties.bool import BoolProperty
@@ -9,15 +11,18 @@ from nio.modules.threading import Lock
 class NoState(Exception):
     pass
 
-class StateMixin(object):
+
+@command('current_state')
+class StateChangeBase(Block):
     """ A block mixin for keeping track of state
-    use _process_state with the signal to determine if a state change is necessary"""
+    use _process_state with the signal to determine if a state change is necessary
+
+    """
     state_expr = ExpressionProperty(title='State Expression', default='{{$state}}')
     backup_interval = TimeDeltaProperty(title='Backup Interval',
                                         default={'seconds': 600})
     use_persistence = BoolProperty(title="Use Persistence", default=True,
             visible=False)
-
 
     def __init__(self):
         super().__init__()
@@ -76,3 +81,6 @@ class StateMixin(object):
             self._state
         )
         self.persistence.save()
+
+    def current_state(self):
+        return {"state": self._state}
