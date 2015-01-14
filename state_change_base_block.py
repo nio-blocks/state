@@ -76,6 +76,7 @@ class StateChangeBase(Block):
         ''' Persist the current state using the persistence module.
 
         '''
+        self._logger.debug("Attempting to persist the current state")
         self.persistence.store(
             "state",
             self._state
