@@ -42,8 +42,12 @@ class StateChange(StateChangeBase):
         self._safe_lock = Lock()
 
     def process_signals(self, signals):
+        self._logger.debug(
+            "Ready to process {} incoming signals".format(len(signals))
+        )
         with self._safe_lock:
             for signal in signals:
+                self._logger.debug("Attempting to set state")
                 out = self._process_state(signal, self.exclude)
                 if out is not None:
                     self.notify_signals([out])
