@@ -117,8 +117,9 @@ class StateBase(GroupBy, Block):
             if new_state != prev_state:
                 # notify signal if there was a prev_state and
                 # the state has changed.
-                self._logger.debug("Changing state from {} to {}".format(
-                    prev_state, self._states[group]))
+                self._logger.debug(
+                    "Changing state from {} to {} for group {}".format(
+                        prev_state, new_state, group))
                 self._states[group] = new_state
 
                 return (prev_state, new_state)

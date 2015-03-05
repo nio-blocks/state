@@ -6,13 +6,14 @@ from nio.util.support.block_test_case import NIOBlockTestCase
 
 class StateSignal(Signal):
 
-    def __init__(self, state):
+    def __init__(self, state, group='null'):
         super().__init__()
         self.state = state
+        self.group = group
 
 
 @patch.object(StateBase, '_backup')
-class TestStateChangeBase(NIOBlockTestCase):
+class TestStateBase(NIOBlockTestCase):
 
     def get_test_modules(self):
         return self.ServiceDefaultModules + ['persistence']
