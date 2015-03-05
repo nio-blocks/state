@@ -1,87 +1,126 @@
+from copy import copy
+from collections import defaultdict
+from .mixins.group_by.group_by_block import GroupBy
 from nio.common.signal.base import Signal
 from nio.common.block.base import Block
 from nio.common.command import command
-from nio.metadata.properties.expression import ExpressionProperty
-from nio.metadata.properties.timedelta import TimeDeltaProperty
-from nio.metadata.properties.bool import BoolProperty
+from nio.common.command.params.string import StringParameter
+from nio.metadata.properties import ExpressionProperty, TimeDeltaProperty, \
+    BoolProperty, VersionProperty
 from nio.modules.scheduler import Job
 from nio.modules.threading import Lock
 
-# Default starting state
-class NoState(Exception):
-    pass
 
+@command('current_state', StringParameter("group", default='null'))
+class StateChangeBase(GroupBy, Block):
 
-@command('current_state')
-class StateChangeBase(Block):
-    """ A block mixin for keeping track of state
-    use _process_state with the signal to determine if a state change is necessary
+    """ A base block mixin for keeping track of state """
 
-    """
-    state_expr = ExpressionProperty(title='State Expression', default='{{$state}}')
-    backup_interval = TimeDeltaProperty(title='Backup Interval',
-                                        default={'seconds': 600})
-    use_persistence = BoolProperty(title="Use Persistence", default=True,
-            visible=False)
+    state_expr = ExpressionProperty(
+        title='State Expression', default='{{$state}}')
+    use_persistence = BoolProperty(title="Use Persistence", default=True)
+    initial_state = ExpressionProperty(
+        title='Initial State', default='{{None}}')
+
+    # Hidden properties
+    version = VersionProperty(default='1.0.0', min_version='1.0.0')
+    backup_interval = TimeDeltaProperty(
+        title='Backup Interval', default={'seconds': 600}, visible=False)
 
     def __init__(self):
         super().__init__()
-        self._state = NoState
+        self._initial_state = None
         self._backup_job = None
-        self._state_lock = Lock()
+        self._state_locks = defaultdict(Lock)
+        self._safe_lock = Lock()
+        self._states = {}
 
     def configure(self, context):
         super().configure(context)
-        if self.use_persistence:
-            self._state = self.persistence.load('state') or self._state
+
+        # Store a cached copy of what a new state should look like
+        self._initial_state = self.initial_state(Signal())
+
+        if self.use_persistence and self.persistence.has_key('states'):
+            self._states = self.persistence.load('states')
 
     def start(self):
         super().start()
-        self._backup_job = Job(
-            self._backup,
-            self.backup_interval,
-            True
-        )
+        self._backup_job = Job(self._backup, self.backup_interval, True)
 
     def stop(self):
         self._backup_job.cancel()
         self._backup()
+        super().stop()
 
-    def _process_state(self, signal, exclude = True):
-        '''changes state from signal. If signal cannot be processed, state
-        remains unchanged.
+    def get_state(self, group):
+        """ Return the current state for a group.
 
-        returns a Signal on successful change. Returns None if state did not change
-        '''
-        with self._state_lock:
-            prev_state = self._state
+        If the state has not been set yet, this function will return the
+        initial state configured for the block. It will also set that as the
+        state.
+        """
+        if group not in self._states:
+            self._states[group] = copy(self._initial_state)
+
+        return self._states[group]
+
+    def process_signals(self, signals):
+        """ Process incoming signals.
+
+        This block is a helper, it will just call _process_group and
+        notify any signals that get appeneded to the to_notify list.
+
+        Most likely, _process_group will be overridden in subclasses instead
+        of this method.
+        """
+        self._logger.debug(
+            "Ready to process {} incoming signals".format(len(signals)))
+        signals_to_notify = []
+        with self._safe_lock:
+            self.for_each_group(
+                self._process_group,
+                kwargs={"to_notify": signals_to_notify})
+        if signals_to_notify:
+            self.notify_signals(signals_to_notify)
+
+    def _process_group(self, signals, group, to_notify=list()):
+        pass
+
+    def _process_state(self, signal, group):
+        """ Changes state based on a signal and a group.
+
+        If the signal cannot be processed, the state remains unchanged.
+
+        Returns:
+            Tuple: (prev_sate, new_state) if the state was changed
+            None - if the state did not change
+        """
+        with self._state_locks[group]:
+            prev_state = self.get_state(group)
             try:
-                self._state = self.state_expr(signal)
-            except Exception as e:
+                new_state = self.state_expr(signal)
+            except:
                 # expression failed so don't set a state.
-                self._logger.error("State Change failed: {}".format(str(e)))
-            if prev_state is not NoState and self._state != prev_state:
+                self._logger.exception(
+                    "State Change failed for group {}".format(group))
+                return
+
+            if self._state != prev_state:
                 # notify signal if there was a prev_state and
                 # the state has changed.
-                self._logger.debug( "Changing state from {} to {}".format(
-                    prev_state, self._state
-                ))
-                if exclude:
-                    signal = Signal()
-                setattr(signal, "state", self._state)
-                setattr(signal, "prev_state", prev_state)
-                return signal
+                self._logger.debug("Changing state from {} to {}".format(
+                    prev_state, self._states[group]))
+                self._states[group] = new_state
+
+                return (prev_state, new_state)
 
     def _backup(self):
-        ''' Persist the current state using the persistence module.
-
-        '''
-        self._logger.debug("Attempting to persist the current state")
-        self.persistence.store(
-            "state",
-            self._state
-        )
+        """ Persist the current state using the persistence module. """
+        self._logger.debug("Attempting to persist the current states")
+        self.persistence.store("states", self._states)
         self.persistence.save()
 
-    def current_state(self):
-        return {"state": self._state}
+    def current_state(self, group='null'):
+        """ Command that returns the current state of a group """
+        return {"state": self.get_state(group)}
