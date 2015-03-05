@@ -1,10 +1,10 @@
-from .state_change_base_block import StateChangeBase
+from .state_base_block import StateBase
 from nio.common.discovery import Discoverable, DiscoverableType
 from nio.metadata.properties import ExpressionProperty
 
 
 @Discoverable(DiscoverableType.block)
-class Relay(StateChangeBase):
+class Relay(StateBase):
 
     """
     If *state_sig* evaluates to True then the signal sets the state according

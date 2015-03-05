@@ -6,13 +6,14 @@ from nio.common.block.base import Block
 from nio.common.command import command
 from nio.common.command.params.string import StringParameter
 from nio.metadata.properties import ExpressionProperty, TimeDeltaProperty, \
-    BoolProperty, VersionProperty
+    BoolProperty
+from nio.metadata.properties.version import VersionProperty
 from nio.modules.scheduler import Job
 from nio.modules.threading import Lock
 
 
 @command('current_state', StringParameter("group", default='null'))
-class StateChangeBase(GroupBy, Block):
+class StateBase(GroupBy, Block):
 
     """ A base block mixin for keeping track of state """
 
@@ -80,11 +81,18 @@ class StateChangeBase(GroupBy, Block):
         with self._safe_lock:
             self.for_each_group(
                 self._process_group,
+                signals,
                 kwargs={"to_notify": signals_to_notify})
         if signals_to_notify:
             self.notify_signals(signals_to_notify)
 
     def _process_group(self, signals, group, to_notify=list()):
+        """ Implement this method in subclasses to process signals in a group.
+
+        Add any signals that you wish to notify to the to_notify list.
+
+        No return value is necessary
+        """
         pass
 
     def _process_state(self, signal, group):
@@ -106,7 +114,7 @@ class StateChangeBase(GroupBy, Block):
                     "State Change failed for group {}".format(group))
                 return
 
-            if self._state != prev_state:
+            if new_state != prev_state:
                 # notify signal if there was a prev_state and
                 # the state has changed.
                 self._logger.debug("Changing state from {} to {}".format(

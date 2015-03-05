@@ -1,11 +1,11 @@
-from .state_change_base_block import StateChangeBase
+from .state_base_block import StateBase
 from nio.common.discovery import Discoverable, DiscoverableType
 from nio.common.signal.base import Signal
 from nio.metadata.properties import BoolProperty
 
 
 @Discoverable(DiscoverableType.block)
-class StateChange(StateChangeBase):
+class StateChange(StateBase):
 
     """ Notifies a signal on *state* change.
 
