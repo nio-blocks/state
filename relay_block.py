@@ -8,7 +8,7 @@ class Relay(StateBase):
 
     """
     If *state_sig* evaluates to True then the signal sets the state according
-    to *state_expr*. Else, the signal gets notified if the state is True.
+    to *state_expr*. Else, the signal gets notified if the *state* is True.
     """
 
     state_sig = ExpressionProperty(

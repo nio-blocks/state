@@ -15,10 +15,6 @@ class StateChange(StateBase):
     *state* is set by the *state_expr* property. It is an expression
     property that evalues to *state*. If the expression fails,
     then the *state* remains unmodified.
-
-    *state* changing from None to not None does not count as a state change.
-    This makes is so that setting the initial state does not trigger
-    a notification Signal.
     """
 
     exclude = BoolProperty(default=True, title="Exclude Existing Fields")

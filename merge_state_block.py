@@ -10,7 +10,7 @@ class MergeState(StateBase):
     """
     If *state_sig* evaluates to True then the signal sets the state according
     to *state_expr*. Else, the signal gets assigned the state to the attribute
-    *state_name*. If no signal has been set, then *state_name* is set to None.
+    *state_name*.
 
     """
 
