@@ -88,7 +88,7 @@ class StateBase(GroupBy, Block):
         if signals_to_notify:
             self.notify_signals(signals_to_notify)
 
-    def _process_group(self, signals, group, to_notify=list()):
+    def _process_group(self, signals, group, to_notify):
         """ Implement this method in subclasses to process signals in a group.
 
         Add any signals that you wish to notify to the to_notify list.

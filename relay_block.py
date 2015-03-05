@@ -14,7 +14,7 @@ class Relay(StateBase):
     state_sig = ExpressionProperty(
         title="Is State Signal", default="{{hasattr($, 'state')}}")
 
-    def _process_group(self, signals, group, to_notify=list()):
+    def _process_group(self, signals, group, to_notify):
         """ Process the signals for a group.
 
         Add any signals that should be passed through to the to_notify list

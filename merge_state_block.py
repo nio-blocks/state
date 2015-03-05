@@ -18,7 +18,7 @@ class MergeState(StateBase):
     state_sig = ExpressionProperty(title="Is State Signal",
                                    default="{{hasattr($, 'state')}}")
 
-    def _process_group(self, signals, group, to_notify=list()):
+    def _process_group(self, signals, group, to_notify):
         for signal in signals:
             try:
                 is_state_sig = self.state_sig(signal)

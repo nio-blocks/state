@@ -23,7 +23,7 @@ class StateChange(StateBase):
 
     exclude = BoolProperty(default=True, title="Exclude Existing Fields")
 
-    def _process_group(self, signals, group, to_notify=list()):
+    def _process_group(self, signals, group, to_notify):
         """ Process the signals for a group.
 
         Add any signals that should be passed through to the to_notify list
