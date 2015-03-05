@@ -23,6 +23,7 @@ class Relay(StateBase):
             try:
                 is_state_sig = self.state_sig(signal)
             except:
+                is_state_sig = False
                 self._logger.exception("Failed determining state signal")
 
             # 3 choices - state setter, state is true, or state is false
