@@ -42,6 +42,8 @@ class StateBase(GroupBy, Block):
         # Store a cached copy of what a new state should look like
         self._initial_state = self.initial_state(Signal())
 
+        # We want to check if the persistence has the key, not check the loaded
+        # value. This allows us to persist False-y states
         if self.use_persistence and self.persistence.has_key('states'):
             self._states = self.persistence.load('states')
 
