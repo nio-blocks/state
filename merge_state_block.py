@@ -30,7 +30,8 @@ class MergeState(StateBase):
                 self._logger.debug("Attempting to set state")
                 self._process_state(signal, group)
             else:
+                existing_state = self.get_state(group)
                 self._logger.debug(
-                    "Assigning state {} to signal".format(self._state))
-                setattr(signal, self.state_name, self.get_state(group))
+                    "Assigning state {} to signal".format(existing_state))
+                setattr(signal, self.state_name, existing_state)
                 to_notify.append(signal)
