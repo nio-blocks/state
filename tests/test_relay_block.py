@@ -12,6 +12,7 @@ class OtherSignal(Signal):
         self.other = state
 
 
+@patch.object(Relay, '_backup')
 class TestRelay(NIOBlockTestCase):
 
     def get_test_modules(self):
@@ -20,7 +21,6 @@ class TestRelay(NIOBlockTestCase):
     def signals_notified(self, signals, output_id='default'):
         self._signals = signals
 
-    @patch.object(Relay, '_backup')
     def test_relay(self, mock_backup):
         blk = Relay()
         self.configure_block(blk, {
@@ -63,3 +63,23 @@ class TestRelay(NIOBlockTestCase):
         self.assertTrue(bool(blk.get_state('null')))
         self.assertEqual(self._signals[0].other, '5')
         blk.stop()
+
+    def test_bad_state_sig(self, mock_backup):
+        """ Make sure that a bad state_sig is not a state setter """
+        blk = Relay()
+        self.configure_block(blk, {
+            'state_sig': '{{$state + 1}}',
+            'state_expr': '{{$state}}',
+            'group_by': 'null'
+        })
+        blk.start()
+
+        # set state - no signal notified
+        blk.process_signals([StateSignal(1)])
+        self.assert_num_signals_notified(0, blk)
+
+        # set state again but error in state_sig
+        # this should NOT set the state, instead the signal
+        # should be let through since the relay should be open
+        blk.process_signals([StateSignal('hello')])
+        self.assert_num_signals_notified(1, blk)

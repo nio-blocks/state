@@ -12,6 +12,7 @@ class OtherSignal(Signal):
         self.other = state
 
 
+@patch.object(MergeState, '_backup')
 class TestMergeState(NIOBlockTestCase):
 
     def get_test_modules(self):
@@ -20,12 +21,10 @@ class TestMergeState(NIOBlockTestCase):
     def signals_notified(self, signals, output_id='default'):
         self._signals = signals
 
-    @patch.object(MergeState, '_backup')
     def test_merge_state(self, mock_backup):
         blk = MergeState()
         self.configure_block(blk, {
             'state_sig': '{{hasattr($, "state")}}',
-            'state_expr': '{{$state}}',
             'initial_state': '{{False}}',
             "state_expr": "{{$state}}",
             'group_by': 'null',
@@ -56,3 +55,24 @@ class TestMergeState(NIOBlockTestCase):
         [self.assertEqual(n.mstate, '2') for n in self._signals]
 
         blk.stop()
+
+    def test_bad_state_sig(self, mock_backup):
+        """ Make sure that a bad state_sig is not a state setter """
+        blk = MergeState()
+        self.configure_block(blk, {
+            'state_sig': '{{$state + 1}}',
+            'state_expr': '{{$state}}',
+            'group_by': 'null'
+        })
+        blk.start()
+
+        # set state - no signal notified
+        blk.process_signals([StateSignal(1)])
+        self.assert_num_signals_notified(0, blk)
+
+        # set state again but error in state_sig
+        # this should NOT set the state, it should add the existing state
+        # to the signal instead
+        blk.process_signals([StateSignal('hello')])
+        self.assert_num_signals_notified(1, blk)
+        self.assertEqual(self._signals[0].state, 1)
