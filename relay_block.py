@@ -1,52 +1,37 @@
-from .state_change_base_block import StateChangeBase, NoState
+from .state_base_block import StateBase
 from nio.common.discovery import Discoverable, DiscoverableType
-from nio.metadata.properties.expression import ExpressionProperty
-from nio.metadata.properties.bool import BoolProperty
-from nio.modules.threading import Lock
+from nio.metadata.properties import ExpressionProperty
+
 
 @Discoverable(DiscoverableType.block)
-class Relay(StateChangeBase):
-    '''
+class Relay(StateBase):
+
+    """
     If *state_sig* evaluates to True then the signal sets the state according
-    to *state_expr*. Else, the signal gets notified if the state is True.
+    to *state_expr*. Else, the signal gets notified if the *state* is True.
+    """
 
-    state starts as False.
+    state_sig = ExpressionProperty(
+        title="Is State Signal", default="{{hasattr($, 'state')}}")
 
-    '''
+    def _process_group(self, signals, group, to_notify):
+        """ Process the signals for a group.
 
-    state_sig = ExpressionProperty(title="Is State Signal",
-                                   default="{{hasattr($, 'state')}}")
+        Add any signals that should be passed through to the to_notify list
+        """
+        for signal in signals:
+            try:
+                is_state_sig = self.state_sig(signal)
+            except:
+                is_state_sig = False
+                self._logger.exception("Failed determining state signal")
 
-    use_persistence = BoolProperty(title="Use Persistence", default=False,
-            visible=False)
-    def __init__(self):
-        super().__init__()
-        self._safe_lock = Lock()
-
-    def configure(self, context):
-        super().configure(context)
-        self._state = False # deletes persistence. Makes sure _state starts as False
-
-    def process_signals(self, signals):
-        signal_list = []
-        with self._safe_lock:
-            for signal in signals:
-                try:
-                    is_state_sig = self.state_sig(signal)
-                except Exception as e:
-                    is_state_sig = False
-                    self._logger.error(
-                        "Failed determining state signal: {}".format(e)
-                    )
-                if is_state_sig:
-                    self._logger.debug("Attempting to set state")
-                    self._process_state(signal)
-                else:
-                    if self._state:
-                        self._logger.debug("State is True")
-                        signal_list.append(signal)
-                    else:
-                        self._logger.debug("State is False")
-
-        if signal_list:
-            self.notify_signals(signal_list)
+            # 3 choices - state setter, state is true, or state is false
+            if is_state_sig:
+                self._logger.debug("Attempting to set state")
+                self._process_state(signal, group)
+            elif self.get_state(group):
+                self._logger.debug("State is True")
+                to_notify.append(signal)
+            else:
+                self._logger.debug("State is False")

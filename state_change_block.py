@@ -1,24 +1,12 @@
-from .state_change_base_block import StateChangeBase
+from .state_base_block import StateBase
 from nio.common.discovery import Discoverable, DiscoverableType
-from nio.modules.threading import Lock
-from nio.metadata.properties.bool import BoolProperty
+from nio.common.signal.base import Signal
+from nio.metadata.properties import BoolProperty
 
-
-# NB: This is not discoverable. Is it needed?
-class StateChangeVolatile(StateChangeBase):
-    def process_signals(self, signals):
-        for signal in signals:
-            try:
-                out = self._process_state(signal)
-            except Exception as e:
-                self.log_error(e)
-                continue
-            if out is not None:
-                self.notify_signals([out])
-                
 
 @Discoverable(DiscoverableType.block)
-class StateChange(StateChangeBase):
+class StateChange(StateBase):
+
     """ Notifies a signal on *state* change.
 
     Maintains a *state*. When *state* changes, a signal is notified
@@ -27,27 +15,25 @@ class StateChange(StateChangeBase):
     *state* is set by the *state_expr* property. It is an expression
     property that evalues to *state*. If the expression fails,
     then the *state* remains unmodified.
-
-    *state* changing from None to not None does not count as a state change.
-    This makes is so that setting the initial state does not trigger
-    a notification Signal.
     """
 
-    exclude = BoolProperty(default=True, title = "Exclude Existing Fields")
-    use_persistence = BoolProperty(title="Use Persistence", default=True,
-            visible=True)
+    exclude = BoolProperty(default=True, title="Exclude Existing Fields")
 
-    def __init__(self):
-        super().__init__()
-        self._safe_lock = Lock()
+    def _process_group(self, signals, group, to_notify):
+        """ Process the signals for a group.
 
-    def process_signals(self, signals):
-        self._logger.debug(
-            "Ready to process {} incoming signals".format(len(signals))
-        )
-        with self._safe_lock:
-            for signal in signals:
-                self._logger.debug("Attempting to set state")
-                out = self._process_state(signal, self.exclude)
-                if out is not None:
-                    self.notify_signals([out])
+        Add any signals that should be passed through to the to_notify list
+        """
+        for signal in signals:
+            state_change = self._process_state(signal, group)
+            if state_change is not None:
+
+                # If we are excluding existing fields we want to add
+                # the states and previous states to an empty signal
+                if self.exclude:
+                    signal = Signal()
+
+                setattr(signal, 'prev_state', state_change[0])
+                setattr(signal, 'state', state_change[1])
+                setattr(signal, 'group', group)
+                to_notify.append(signal)

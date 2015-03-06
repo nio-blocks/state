@@ -1,50 +1,38 @@
-from .state_change_base_block import StateChangeBase, NoState
+from .state_base_block import StateBase
 from nio.common.discovery import Discoverable, DiscoverableType
-from nio.metadata.properties.expression import ExpressionProperty
-from nio.metadata.properties.bool import BoolProperty
-from nio.metadata.properties.string import StringProperty
+from nio.metadata.properties import ExpressionProperty
+from nio.metadata.properties import StringProperty
 
 
 @Discoverable(DiscoverableType.block)
-class MergeState(StateChangeBase):
-    '''
+class MergeState(StateBase):
+
+    """
     If *state_sig* evaluates to True then the signal sets the state according
     to *state_expr*. Else, the signal gets assigned the state to the attribute
-    *state_name*. If no signal has been set, then *state_name* is set to None.
+    *state_name*.
 
-    '''
+    """
 
     state_name = StringProperty(default='state', title="State Name")
     state_sig = ExpressionProperty(title="Is State Signal",
                                    default="{{hasattr($, 'state')}}")
-    use_persistence = BoolProperty(title="Use Persistence", default=False,
-            visible=False)
 
-    def process_signals(self, signals):
-        signal_list = []
+    def _process_group(self, signals, group, to_notify):
         for signal in signals:
             try:
                 is_state_sig = self.state_sig(signal)
-            except Exception as e:
+            except:
                 is_state_sig = False
-                self._logger.error(
-                    "Failed determining state signal: {}".format(e)
-                )
+                self._logger.exception("Failed determining state signal")
+
+            # 2 choices - state setter, or trying to pass through
             if is_state_sig:
                 self._logger.debug("Attempting to set state")
-                self._process_state(signal)
+                self._process_state(signal, group)
             else:
-                if self._state is not NoState:
-                    self._logger.debug(
-                        "Assigning state to signal: {}".format(self._state)
-                    )
-                    setattr(signal, self.state_name, self._state)
-                    signal_list.append(signal)
-                else:
-                    signal_list.append(signal)
-                    self._logger.debug(
-                        "Attribute '{}' not assigned since state is "
-                        "not yet set".format(self.state_name)
-                    )
-        if signal_list:
-            self.notify_signals(signal_list)
+                existing_state = self.get_state(group)
+                self._logger.debug(
+                    "Assigning state {} to signal".format(existing_state))
+                setattr(signal, self.state_name, existing_state)
+                to_notify.append(signal)
