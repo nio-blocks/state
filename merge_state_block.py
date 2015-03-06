@@ -26,7 +26,7 @@ class MergeState(StateBase):
                 is_state_sig = False
                 self._logger.exception("Failed determining state signal")
 
-            # 3 choices - state setter, state is true, or state is false
+            # 2 choices - state setter, or trying to pass through
             if is_state_sig:
                 self._logger.debug("Attempting to set state")
                 self._process_state(signal, group)
