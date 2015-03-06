@@ -54,7 +54,7 @@ Additional Properties
 
 Output
 ------
-When *state* changes, a signal is notifed with attribues *state* and *prev_state*. If exclude is _unchecked_ then the signal that changed the state will have the state and prev_state added to it
+When *state* changes, a signal is notifed with attribues *state*, *prev_state*, and *group*. If exclude is _unchecked_ then the signal that changed the state will have the attributes added to it.
 
 ------------------
 

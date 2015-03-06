@@ -35,4 +35,5 @@ class StateChange(StateBase):
 
                 setattr(signal, 'prev_state', state_change[0])
                 setattr(signal, 'state', state_change[1])
+                setattr(signal, 'group', group)
                 to_notify.append(signal)
