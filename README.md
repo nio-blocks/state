@@ -30,7 +30,14 @@ Commands
 
 Input
 -----
+
+### default
+
 Any list of signals. Each signal will be evaluated against **state_expr** to determine the new *state* of the block for the signal's group.
+
+### setter
+
+Signals passed to this input will always (and only) be used to set the state. They ignore **sate_sig**.
 
 Output
 ------

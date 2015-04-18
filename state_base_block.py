@@ -18,10 +18,10 @@ class StateBase(GroupBy, Block):
     """ A base block mixin for keeping track of state """
 
     state_expr = ExpressionProperty(
-        title='State Expression', default='{{$state}}')
+        title='State Expression', default='{{ $state }}')
     use_persistence = BoolProperty(title="Use Persistence", default=True)
     initial_state = ExpressionProperty(
-        title='Initial State', default='{{None}}')
+        title='Initial State', default='{{ None }}')
 
     # Hidden properties
     version = VersionProperty(default='1.0.0', min_version='1.0.0')
@@ -68,7 +68,7 @@ class StateBase(GroupBy, Block):
 
         return self._states[group]
 
-    def process_signals(self, signals):
+    def process_signals(self, signals, input_id='default'):
         """ Process incoming signals.
 
         This block is a helper, it will just call _process_group and
@@ -81,10 +81,16 @@ class StateBase(GroupBy, Block):
             "Ready to process {} incoming signals".format(len(signals)))
         signals_to_notify = []
         with self._safe_lock:
-            self.for_each_group(
-                self._process_group,
-                signals,
-                kwargs={"to_notify": signals_to_notify})
+            if input_id == 'default':
+                self.for_each_group(
+                    self._process_group,
+                    signals,
+                    kwargs={"to_notify": signals_to_notify})
+            elif input_id == 'setter':
+                self.for_each_group(
+                    self._process_setter_group,
+                    signals,
+                    kwargs={"to_notify": signals_to_notify})
         if signals_to_notify:
             self.notify_signals(signals_to_notify)
 
@@ -94,6 +100,19 @@ class StateBase(GroupBy, Block):
         Add any signals that you wish to notify to the to_notify list.
 
         No return value is necessary
+
+        This method is for signals that come in the 'default' input.
+        """
+        pass
+
+    def _process_setter_group(self, signals, group, to_notify):
+        """ Implement this method in subclasses to process signals in a group.
+
+        Add any signals that you wish to notify to the to_notify list.
+
+        No return value is necessary
+
+        This method is for signals that come in the 'setter' input.
         """
         pass
 
