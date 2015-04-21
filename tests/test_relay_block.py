@@ -64,6 +64,28 @@ class TestRelay(NIOBlockTestCase):
         self.assertEqual(self._signals[0].other, '5')
         blk.stop()
 
+    def test_setter_input(self, mock_backup):
+        blk = Relay()
+        self.configure_block(blk, {
+            # No signals in default input are state setter signals
+            'state_sig': '{{ False }}',
+            'state_expr': '{{$state}}',
+            'initial_state': '{{False}}',
+            'group_by': 'null'
+        })
+        blk.start()
+        self.assertFalse(blk.get_state('null'))
+        # set state to True
+        blk.process_signals([StateSignal('1')], input_id='setter')
+        self.assertEqual(blk.get_state('null'), '1')
+        self.assertTrue(bool(blk.get_state('null')))
+        # set state back to False
+        blk.process_signals([StateSignal('')], input_id='setter')
+        self.assertEqual(blk.get_state('null'), '')
+        self.assertFalse(bool(blk.get_state('null')))
+        # no signals were notified
+        self.assert_num_signals_notified(0, blk)
+
     def test_bad_state_sig(self, mock_backup):
         """ Make sure that a bad state_sig is not a state setter """
         blk = Relay()
