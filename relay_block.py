@@ -1,11 +1,13 @@
 from .state_base_block import StateBase
 from nio.common.block.attribute import Input
+from nio.common.versioning.dependency import DependsOn
 from nio.common.discovery import Discoverable, DiscoverableType
 from nio.metadata.properties import ExpressionProperty, VersionProperty
 
 
 @Input('setter')
 @Input('getter')
+@DependsOn("nio", "1.5.2")
 @Discoverable(DiscoverableType.block)
 class Relay(StateBase):
 
