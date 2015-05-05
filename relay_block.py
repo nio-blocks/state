@@ -1,10 +1,11 @@
 from .state_base_block import StateBase
 from nio.common.block.attribute import Input
 from nio.common.discovery import Discoverable, DiscoverableType
-from nio.metadata.properties import ExpressionProperty
+from nio.metadata.properties import ExpressionProperty, VersionProperty
 
 
 @Input('setter')
+@Input('getter')
 @Discoverable(DiscoverableType.block)
 class Relay(StateBase):
 
@@ -15,6 +16,7 @@ class Relay(StateBase):
 
     state_sig = ExpressionProperty(
         title="Is State Signal", default="{{ hasattr($, 'state') }}")
+    version = VersionProperty(default='2.0.0', min_version='2.0.0')
 
     def _process_group(self, signals, group, to_notify):
         """ Process the signals for a group.

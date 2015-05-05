@@ -24,9 +24,10 @@ class TestRelay(NIOBlockTestCase):
     def test_relay(self, mock_backup):
         blk = Relay()
         self.configure_block(blk, {
-            'state_sig': '{{hasattr($, "state")}}',
-            'state_expr': '{{$state}}',
-            'initial_state': '{{False}}',
+            # Signals to 'getter' input act as setter if state_sig is True
+            'state_sig': '{{ hasattr($, "state") }}',
+            'state_expr': '{{ $state }}',
+            'initial_state': '{{ False }}',
             'group_by': 'null'
         })
         blk.start()
@@ -64,13 +65,37 @@ class TestRelay(NIOBlockTestCase):
         self.assertEqual(self._signals[0].other, '5')
         blk.stop()
 
+    def test_getter_input(self, mock_backup):
+        blk = Relay()
+        self.configure_block(blk, {
+            # No signals in 'getter' input are state setter signals
+            'state_sig': '{{ False }}',
+            'state_expr': '{{ $state }}',
+            'initial_state': '{{ False }}',
+            'group_by': 'null'
+        })
+        blk.start()
+        # initial state is False so signals do not pass through
+        blk.process_signals([OtherSignal('3')], input_id='getter')
+        self.assert_num_signals_notified(0, blk)
+        # set state to True
+        blk.process_signals([StateSignal('1')], input_id='setter')
+        # pass signals through
+        blk.process_signals([OtherSignal('3')], input_id='getter')
+        self.assert_num_signals_notified(1, blk)
+        # set state back to False
+        blk.process_signals([StateSignal('')], input_id='setter')
+        # signals do not pass through
+        blk.process_signals([OtherSignal('3')], input_id='getter')
+        self.assert_num_signals_notified(1, blk)
+
     def test_setter_input(self, mock_backup):
         blk = Relay()
         self.configure_block(blk, {
-            # No signals in default input are state setter signals
+            # No signals in 'getter' input are state setter signals
             'state_sig': '{{ False }}',
-            'state_expr': '{{$state}}',
-            'initial_state': '{{False}}',
+            'state_expr': '{{ $state }}',
+            'initial_state': '{{ False }}',
             'group_by': 'null'
         })
         blk.start()
@@ -90,8 +115,8 @@ class TestRelay(NIOBlockTestCase):
         """ Make sure that a bad state_sig is not a state setter """
         blk = Relay()
         self.configure_block(blk, {
-            'state_sig': '{{$state + 1}}',
-            'state_expr': '{{$state}}',
+            'state_sig': '{{ $state + 1 }}',
+            'state_expr': '{{ $state }}',
             'group_by': 'null'
         })
         blk.start()
@@ -105,3 +130,10 @@ class TestRelay(NIOBlockTestCase):
         # should be let through since the relay should be open
         blk.process_signals([StateSignal('hello')])
         self.assert_num_signals_notified(1, blk)
+        self.assertTrue(bool(blk.get_state('null')))
+
+        # error in state_sig doesn't matter if the signals is passed into the
+        # 'setter' input. And the empty strings sets state to False.
+        blk.process_signals([StateSignal('')], 'setter')
+        self.assert_num_signals_notified(1, blk)
+        self.assertFalse(bool(blk.get_state('null')))
