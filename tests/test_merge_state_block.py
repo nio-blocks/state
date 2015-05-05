@@ -60,8 +60,8 @@ class TestMergeState(NIOBlockTestCase):
         """ Make sure that a bad state_sig is not a state setter """
         blk = MergeState()
         self.configure_block(blk, {
-            'state_sig': '{{$state + 1}}',
-            'state_expr': '{{$state}}',
+            'state_sig': '{{ $state + 1 }}',
+            'state_expr': '{{ $state }}',
             'group_by': 'null'
         })
         blk.start()
@@ -77,15 +77,37 @@ class TestMergeState(NIOBlockTestCase):
         self.assert_num_signals_notified(1, blk)
         self.assertEqual(self._signals[0].state, 1)
 
+    def test_getter_input(self, mock_backup):
+        blk = MergeState()
+        self.configure_block(blk, {
+            # No signals in 'getter' input are state setter signals
+            'state_sig': '{{ False }}',
+            'state_expr': '{{ $state }}',
+            'initial_state': '{{ False }}',
+            'group_by': 'null',
+            'state_name': 'mstate'
+        })
+        blk.start()
+        # getter should get initial statue of False
+        blk.process_signals([OtherSignal('3')], input_id='getter')
+        self.assertEqual(self._signals[0].mstate, False)
+        self.assert_num_signals_notified(1, blk)
+        # set state to '1'
+        blk.process_signals([StateSignal('1')], input_id='setter')
+        # getter should get state of '1'
+        blk.process_signals([OtherSignal('3')], input_id='getter')
+        self.assertEqual(self._signals[0].mstate, '1')
+        self.assert_num_signals_notified(2, blk)
+
     def test_setter_input(self, mock_backup):
         blk = MergeState()
         self.configure_block(blk, {
             # No signals in default input are state setter signals
             'state_sig': '{{ False }}',
-            'initial_state': '{{False}}',
-            "state_expr": "{{$state}}",
+            'initial_state': '{{ False }}',
+            "state_expr": "{{ $state }}",
             'group_by': 'null',
-            "state_name": "mstate"
+            'state_name': "mstate"
         })
         blk.start()
         # set state
@@ -96,5 +118,3 @@ class TestMergeState(NIOBlockTestCase):
         self.assertEqual(blk.get_state('null'), '2')
         # no signals were notified
         self.assert_num_signals_notified(0, blk)
-
-

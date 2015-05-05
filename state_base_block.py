@@ -24,7 +24,7 @@ class StateBase(GroupBy, Block):
         title='Initial State', default='{{ None }}')
 
     # Hidden properties
-    version = VersionProperty(default='1.0.0', min_version='1.0.0')
+    version = VersionProperty(default='1.0.1', min_version='1.0.0')
     backup_interval = TimeDeltaProperty(
         title='Backup Interval', default={'seconds': 600}, visible=False)
 
@@ -81,7 +81,7 @@ class StateBase(GroupBy, Block):
             "Ready to process {} incoming signals".format(len(signals)))
         signals_to_notify = []
         with self._safe_lock:
-            if input_id == 'default':
+            if input_id == 'default' or input_id == 'getter':
                 self.for_each_group(
                     self._process_group,
                     signals,
