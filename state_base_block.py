@@ -151,6 +151,10 @@ class StateBase(GroupBy, Block):
         self.persistence.store("states", self._states)
         self.persistence.save()
 
-    def current_state(self, group='null'):
+    def current_state(self, group):
         """ Command that returns the current state of a group """
-        return {"state": self.get_state(group)}
+        with self._state_locks[group]:
+            if group in self._states:
+                return {"state": self._states[group]}
+            else:
+                return {}
