@@ -1,7 +1,7 @@
 from .state_base_block import StateBase
 from nio.common.discovery import Discoverable, DiscoverableType
 from nio.common.signal.base import Signal
-from nio.metadata.properties import BoolProperty
+from nio.metadata.properties import BoolProperty, StringProperty
 
 
 @Discoverable(DiscoverableType.block)
@@ -17,6 +17,8 @@ class StateChange(StateBase):
     then the *state* remains unmodified.
     """
 
+    state_name = StringProperty(
+        default='state', title="State Name", visible=False)
     exclude = BoolProperty(default=True, title="Exclude Existing Fields")
 
     def _process_group(self, signals, group, to_notify):
@@ -33,7 +35,8 @@ class StateChange(StateBase):
                 if self.exclude:
                     signal = Signal()
 
-                setattr(signal, 'prev_state', state_change[0])
-                setattr(signal, 'state', state_change[1])
+                setattr(signal,
+                        'prev_{}'.format(self.state_name), state_change[0])
+                setattr(signal, '{}'.format(self.state_name), state_change[1])
                 setattr(signal, 'group', group)
                 to_notify.append(signal)
