@@ -103,10 +103,22 @@ class TestStateBase(NIOBlockTestCase):
         blk = StateBase()
         self.configure_block(blk, {})
         blk.start()
-        # Empty dictionary is returned when a group is not established yet
-        self.assertDictEqual(blk.current_state('A'), {})
+        # Test when state is not defined for group
+        from nio.modules.web.http import HTTPNotFound
+        with self.assertRaises(HTTPNotFound):
+            blk.current_state('A')
+        # Now test some valid states
         process_out = blk._process_state(StateSignal(1), 'A')
-        self.assertDictEqual(blk.current_state('A'), {'state': 1})
+        self.assertDictEqual(blk.current_state('A'),
+                             {'group': 'A', 'state': 1})
         process_out = blk._process_state(StateSignal(2), 'A')
-        self.assertDictEqual(blk.current_state('A'), {'state': 2})
+        self.assertDictEqual(blk.current_state('A'),
+                             {'group': 'A', 'state': 2})
+        process_out = blk._process_state(StateSignal(1), 'B')
+        self.assertDictEqual(blk.current_state('B'),
+                             {'group': 'B', 'state': 1})
+        # And all states
+        self.assertListEqual(
+            sorted(blk.current_state(group=None), key=lambda k: k['group']),
+                   [{'group': 'A', 'state': 2}, {'group': 'B', 'state': 1}])
         blk.stop()

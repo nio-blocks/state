@@ -26,7 +26,7 @@ None
 
 Commands
 --------
--   **current_state** (parameter: group): Gets the current state for a given group. Response is a dictionary with a "state" key. If the specified group does not exist, then an empty dicitonary is returned.
+-   **current_state** (parameter: group): Gets the current state for a given group. Response is a dictionary with "state" and "group" keys. If 'group' is not specified then a list is returned with a dictionary for each group. If the specified group does not exist, then an empty dicitonary is returned.
 
 Input
 -----
