@@ -24,8 +24,6 @@ class TestRelay(NIOBlockTestCase):
     def test_relay(self, mock_backup):
         blk = Relay()
         self.configure_block(blk, {
-            # Signals to 'getter' input act as setter if state_sig is True
-            'state_sig': '{{ hasattr($, "state") }}',
             'state_expr': '{{ $state }}',
             'initial_state': '{{ False }}',
             'group_by': 'null'
@@ -35,20 +33,22 @@ class TestRelay(NIOBlockTestCase):
         self.assertFalse(blk.get_state('null'))
 
         # set state to True
-        blk.process_signals([StateSignal('1')])
+        blk.process_signals([StateSignal('1')], input_id='setter')
         self.assertEqual(blk.get_state('null'), '1')
         self.assertTrue(bool(blk.get_state('null')))
         self.assert_num_signals_notified(0, blk)
 
         # send a true state + other signal
-        blk.process_signals([StateSignal('2'), OtherSignal('3')])
+        blk.process_signals([StateSignal('2')], input_id='setter')
+        blk.process_signals([OtherSignal('3')])
         self.assert_num_signals_notified(1, blk)
         self.assertEqual(blk.get_state('null'), '2')
         self.assertTrue(bool(blk.get_state('null')))
         self.assertEqual(self._signals[0].other, '3')
 
         # no signals pass through when State is false
-        blk.process_signals([StateSignal(False), OtherSignal('4')])
+        blk.process_signals([StateSignal(False)], input_id='setter')
+        blk.process_signals([OtherSignal('4')])
         self.assertFalse(bool(blk.get_state('null')))
         self.assert_num_signals_notified(1, blk)
 
@@ -58,7 +58,8 @@ class TestRelay(NIOBlockTestCase):
         self.assert_num_signals_notified(1, blk)
 
         # set state to 1 and get notification signal.
-        blk.process_signals([StateSignal('1'), OtherSignal('5')])
+        blk.process_signals([StateSignal('1')], input_id='setter')
+        blk.process_signals([OtherSignal('5')])
         self.assert_num_signals_notified(2, blk)
         self.assertEqual(blk.get_state('null'), '1')
         self.assertTrue(bool(blk.get_state('null')))
@@ -69,7 +70,6 @@ class TestRelay(NIOBlockTestCase):
         blk = Relay()
         self.configure_block(blk, {
             # No signals in 'getter' input are state setter signals
-            'state_sig': '{{ False }}',
             'state_expr': '{{ $state }}',
             'initial_state': '{{ False }}',
             'group_by': 'null'
@@ -93,7 +93,6 @@ class TestRelay(NIOBlockTestCase):
         blk = Relay()
         self.configure_block(blk, {
             # No signals in 'getter' input are state setter signals
-            'state_sig': '{{ False }}',
             'state_expr': '{{ $state }}',
             'initial_state': '{{ False }}',
             'group_by': 'null'
@@ -110,30 +109,3 @@ class TestRelay(NIOBlockTestCase):
         self.assertFalse(bool(blk.get_state('null')))
         # no signals were notified
         self.assert_num_signals_notified(0, blk)
-
-    def test_bad_state_sig(self, mock_backup):
-        """ Make sure that a bad state_sig is not a state setter """
-        blk = Relay()
-        self.configure_block(blk, {
-            'state_sig': '{{ $state + 1 }}',
-            'state_expr': '{{ $state }}',
-            'group_by': 'null'
-        })
-        blk.start()
-
-        # set state - no signal notified
-        blk.process_signals([StateSignal(1)])
-        self.assert_num_signals_notified(0, blk)
-
-        # set state again but error in state_sig
-        # this should NOT set the state, instead the signal
-        # should be let through since the relay should be open
-        blk.process_signals([StateSignal('hello')])
-        self.assert_num_signals_notified(1, blk)
-        self.assertTrue(bool(blk.get_state('null')))
-
-        # error in state_sig doesn't matter if the signals is passed into the
-        # 'setter' input. And the empty strings sets state to False.
-        blk.process_signals([StateSignal('')], 'setter')
-        self.assert_num_signals_notified(1, blk)
-        self.assertFalse(bool(blk.get_state('null')))
