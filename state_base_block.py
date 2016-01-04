@@ -1,6 +1,5 @@
 from copy import copy
 from collections import defaultdict
-from .mixins.group_by.group_by_block import GroupBy
 from nio.common.signal.base import Signal
 from nio.common.block.base import Block
 from nio.common.command import command
@@ -10,9 +9,11 @@ from nio.metadata.properties import ExpressionProperty, TimeDeltaProperty, \
 from nio.metadata.properties.version import VersionProperty
 from nio.modules.scheduler import Job
 from nio.modules.threading import Lock
+from nio.modules.web.http import HTTPNotFound
+from .mixins.group_by.group_by_block import GroupBy
 
 
-@command('current_state', StringParameter("group", default='null'))
+@command('current_state', StringParameter("group", allow_none=True))
 class StateBase(GroupBy, Block):
 
     """ A base block mixin for keeping track of state """
@@ -151,6 +152,17 @@ class StateBase(GroupBy, Block):
         self.persistence.store("states", self._states)
         self.persistence.save()
 
-    def current_state(self, group='null'):
+    def current_state(self, group):
         """ Command that returns the current state of a group """
-        return {"state": self.get_state(group)}
+        if group is None:
+            return_list = []
+            with self._safe_lock:
+                for group in self._states:
+                    return_list.append({"group": group,
+                                        "state": self._states[group]})
+            return return_list
+        if group in self._states:
+            return {"group": group,
+                    "state": self._states[group]}
+        else:
+            raise HTTPNotFound()
