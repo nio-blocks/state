@@ -11,39 +11,27 @@ from nio.metadata.properties import ExpressionProperty, VersionProperty
 @Discoverable(DiscoverableType.block)
 class Relay(StateBase):
 
-    """
-    If *state_sig* evaluates to True then the signal sets the state according
-    to *state_expr*. Else, the signal gets notified if the *state* is True.
-    """
+    """ Passthrough *getter* signals if the state is True.
 
-    state_sig = ExpressionProperty(
-        title="Is State Signal", default="{{ hasattr($, 'state') }}")
-    version = VersionProperty(default='2.0.0', min_version='2.0.0')
+    *getter* signals are pass through the block if the last *setter* signal set
+    the state to True. Else, the signals to *getter* are filtered out.
+    """
+    version = VersionProperty(default='3.0.0')
 
     def _process_group(self, signals, group, to_notify):
-        """ Process the signals for a group.
+        """ Process the signals from the default/getter input for a group.
 
         Add any signals that should be passed through to the to_notify list
         """
         for signal in signals:
-            try:
-                is_state_sig = self.state_sig(signal)
-            except:
-                is_state_sig = False
-                self._logger.exception("Failed determining state signal")
-
-            # 3 choices - state setter, state is true, or state is false
-            if is_state_sig:
-                self._logger.debug("Attempting to set state")
-                self._process_state(signal, group)
-            elif self.get_state(group):
+            if self.get_state(group):
                 self._logger.debug("State is True")
                 to_notify.append(signal)
             else:
                 self._logger.debug("State is False")
 
     def _process_setter_group(self, signals, group, to_notify):
-        """ Process the signals for a group.
+        """ Process the signals from the setter input for a group.
 
         Add any signals that should be passed through to the to_notify list
         """

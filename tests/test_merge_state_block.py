@@ -24,7 +24,6 @@ class TestMergeState(NIOBlockTestCase):
     def test_merge_state(self, mock_backup):
         blk = MergeState()
         self.configure_block(blk, {
-            'state_sig': '{{hasattr($, "state")}}',
             'initial_state': '{{False}}',
             "state_expr": "{{$state}}",
             'group_by': 'null',
@@ -35,12 +34,13 @@ class TestMergeState(NIOBlockTestCase):
         signals_notified = 0
 
         # set state
-        blk.process_signals([StateSignal('1')])
+        blk.process_signals([StateSignal('1')], input_id='setter')
         self.assertEqual(blk.get_state('null'), '1')
         self.assert_num_signals_notified(signals_notified, blk)
 
         # set state + other signal
-        blk.process_signals([StateSignal('2'), OtherSignal('3')])
+        blk.process_signals([StateSignal('2')], input_id='setter')
+        blk.process_signals([OtherSignal('3')])
         signals_notified += 1
         self.assert_num_signals_notified(signals_notified, blk)
         self.assertEqual(blk.get_state('null'), '2')
@@ -56,32 +56,10 @@ class TestMergeState(NIOBlockTestCase):
 
         blk.stop()
 
-    def test_bad_state_sig(self, mock_backup):
-        """ Make sure that a bad state_sig is not a state setter """
-        blk = MergeState()
-        self.configure_block(blk, {
-            'state_sig': '{{ $state + 1 }}',
-            'state_expr': '{{ $state }}',
-            'group_by': 'null'
-        })
-        blk.start()
-
-        # set state - no signal notified
-        blk.process_signals([StateSignal(1)])
-        self.assert_num_signals_notified(0, blk)
-
-        # set state again but error in state_sig
-        # this should NOT set the state, it should add the existing state
-        # to the signal instead
-        blk.process_signals([StateSignal('hello')])
-        self.assert_num_signals_notified(1, blk)
-        self.assertEqual(self._signals[0].state, 1)
-
     def test_getter_input(self, mock_backup):
         blk = MergeState()
         self.configure_block(blk, {
             # No signals in 'getter' input are state setter signals
-            'state_sig': '{{ False }}',
             'state_expr': '{{ $state }}',
             'initial_state': '{{ False }}',
             'group_by': 'null',
@@ -103,7 +81,6 @@ class TestMergeState(NIOBlockTestCase):
         blk = MergeState()
         self.configure_block(blk, {
             # No signals in default input are state setter signals
-            'state_sig': '{{ False }}',
             'initial_state': '{{ False }}',
             "state_expr": "{{ $state }}",
             'group_by': 'null',

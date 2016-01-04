@@ -31,21 +31,19 @@ Commands
 Input
 -----
 
-### default
+### getter (default)
 
-Any list of signals. Each signal will be evaluated against **state_expr** to determine the new *state* of the block for the signal's group.
+Any list of signals. Signal that _get_ a state and/or pass through the block.
 
 ### setter
 
-Signals passed to this input will always (and only) be used to set the state. They ignore **sate_sig**.
+Signals passed to this input set the *state* of the block. Each signal is evaluated against **state_expr** to determine the new *state* of the block for the signal's group.
 
 Output
 ------
 Depends on the individual block
 
-
-------------------
-
+------------------------------------------------------------------------------
 
 StateChange
 ============
@@ -54,7 +52,7 @@ Maintains a *state* and when *state* changes, a signal is notified that containe
 
 
 Additional Properties
----------
+---------------------
 
 -   **exclude**: Select whether you want to exclude other signals. If checked, the only output will be *state* and *prev_state*. If not checked, *state* and *prev_state* will be appended onto the incomming signal.
 
@@ -63,40 +61,27 @@ Output
 ------
 When *state* changes, a signal is notifed with attribues *state*, *prev_state*, and *group*. If exclude is _unchecked_ then the signal that changed the state will have the attributes added to it.
 
-------------------
+------------------------------------------------------------------------------
 
 
 Relay
-============
+=====
 
-If *state_sig* evaluates to True, then it is used to set the *state*. Else, the signal is notified if *state* is True.
-
-- When *state* is True, signals can pass through
-- When *state* is False, signals are blocked
-
-Additional Properties
----------
-
--   **state_sig**: If True, signal is used to set *state*. Else, the signal is notified if *state* is True.
-
+*getter* signals are pass through the block if the last *setter* signal set the state to True. Else, the signals to *getter* are filtered out.
 
 Output
 ------
-When *state* is True, non state-setting signals are output
+When *state* is True, input *getter* signals are output
 
 When *state* is False, no signals are output
 
--------------
+------------------------------------------------------------------------------
 
 MergeState
-============
+==========
 
-Maintains a *state* and merges that state (with name **state_name**) with signals that passes through
+Maintains a *state* and merges that state (with name **state_name**) with signals that are input through the *getter* input.
 
-Additional Properties
----------
-
--   **state_sig**: If True, signal is used to set *state*. Else, the signal is notified and *state* is assigned to the attribute *state_name*.
 -   **state_name**: String property that is the name of the appended *state*
 
 Output
