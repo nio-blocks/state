@@ -26,7 +26,7 @@ class Relay(StateBase):
         for signal in signals:
             if self.get_state(group):
                 self._logger.debug("State is True")
-                to_notify.append(signal)
+                to_notify['default'].append(signal)
             else:
                 self._logger.debug("State is False")
 

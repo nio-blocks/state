@@ -39,4 +39,4 @@ class StateChange(StateBase):
                         'prev_{}'.format(self.state_name), state_change[0])
                 setattr(signal, '{}'.format(self.state_name), state_change[1])
                 setattr(signal, 'group', group)
-                to_notify.append(signal)
+                to_notify['default'].append(signal)
