@@ -18,9 +18,6 @@ class TestRelay(NIOBlockTestCase):
     def get_test_modules(self):
         return self.ServiceDefaultModules + ['persistence']
 
-    def signals_notified(self, signals, output_id='default'):
-        self._signals = signals
-
     def test_relay(self, mock_backup):
         blk = Relay()
         self.configure_block(blk, {
@@ -44,7 +41,7 @@ class TestRelay(NIOBlockTestCase):
         self.assert_num_signals_notified(1, blk)
         self.assertEqual(blk.get_state('null'), '2')
         self.assertTrue(bool(blk.get_state('null')))
-        self.assertEqual(self._signals[0].other, '3')
+        self.assertEqual(self.last_notified['default'][0].other, '3')
 
         # no signals pass through when State is false
         blk.process_signals([StateSignal(False)], input_id='setter')
@@ -63,7 +60,7 @@ class TestRelay(NIOBlockTestCase):
         self.assert_num_signals_notified(2, blk)
         self.assertEqual(blk.get_state('null'), '1')
         self.assertTrue(bool(blk.get_state('null')))
-        self.assertEqual(self._signals[0].other, '5')
+        self.assertEqual(self.last_notified['default'][1].other, '5')
         blk.stop()
 
     def test_getter_input(self, mock_backup):
