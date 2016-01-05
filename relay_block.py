@@ -15,8 +15,9 @@ class Relay(StateBase):
 
     """ Passthrough *getter* signals if the state is True.
 
-    *getter* signals are pass through the block if the last *setter* signal set
-    the state to True. Else, the signals to *getter* are filtered out.
+    *getter* signals pass through to the *true* output if the last *setter*
+    signal set the state to True. Else, the signals to *getter* pass through
+    to the *false* output.
     """
     version = VersionProperty(default='4.0.0')
 
