@@ -18,9 +18,6 @@ class TestMergeState(NIOBlockTestCase):
     def get_test_modules(self):
         return self.ServiceDefaultModules + ['persistence']
 
-    def signals_notified(self, signals, output_id='default'):
-        self._signals = signals
-
     def test_merge_state(self, mock_backup):
         blk = MergeState()
         self.configure_block(blk, {
@@ -44,15 +41,15 @@ class TestMergeState(NIOBlockTestCase):
         signals_notified += 1
         self.assert_num_signals_notified(signals_notified, blk)
         self.assertEqual(blk.get_state('null'), '2')
-        self.assertEqual(self._signals[0].mstate, '2')
+        self.assertEqual(self.last_notified['default'][0].mstate, '2')
 
         # Just sending other signals pass through and have mstates of '2'
         blk.process_signals([OtherSignal(n) for n in range(100)])
         signals_notified += 100
         self.assertEqual(blk.get_state('null'), '2')
         self.assert_num_signals_notified(signals_notified, blk)
-        self.assertEqual(len(self._signals), 100)
-        [self.assertEqual(n.mstate, '2') for n in self._signals]
+        self.assertEqual(len(self.last_notified['default']), signals_notified)
+        [self.assertEqual(n.mstate, '2') for n in self.last_notified['default']]
 
         blk.stop()
 
@@ -68,13 +65,14 @@ class TestMergeState(NIOBlockTestCase):
         blk.start()
         # getter should get initial statue of False
         blk.process_signals([OtherSignal('3')], input_id='getter')
-        self.assertEqual(self._signals[0].mstate, False)
+        print(self.last_notified['default'])
+        self.assertEqual(self.last_notified['default'][0].mstate, False)
         self.assert_num_signals_notified(1, blk)
         # set state to '1'
         blk.process_signals([StateSignal('1')], input_id='setter')
         # getter should get state of '1'
         blk.process_signals([OtherSignal('3')], input_id='getter')
-        self.assertEqual(self._signals[0].mstate, '1')
+        self.assertEqual(self.last_notified['default'][1].mstate, '1')
         self.assert_num_signals_notified(2, blk)
 
     def test_setter_input(self, mock_backup):

@@ -80,7 +80,7 @@ class StateBase(GroupBy, Block):
         """
         self._logger.debug(
             "Ready to process {} incoming signals".format(len(signals)))
-        signals_to_notify = []
+        signals_to_notify = defaultdict(list)
         with self._safe_lock:
             if input_id == 'default' or input_id == 'getter':
                 self.for_each_group(
@@ -92,8 +92,9 @@ class StateBase(GroupBy, Block):
                     self._process_setter_group,
                     signals,
                     kwargs={"to_notify": signals_to_notify})
-        if signals_to_notify:
-            self.notify_signals(signals_to_notify)
+        for signal_list in signals_to_notify:
+            self.notify_signals(signals_to_notify[signal_list],
+                                output_id=signal_list)
 
     def _process_group(self, signals, group, to_notify):
         """ Implement this method in subclasses to process signals in a group.

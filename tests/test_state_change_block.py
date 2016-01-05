@@ -8,15 +8,8 @@ from nio.util.support.block_test_case import NIOBlockTestCase
 @patch.object(StateBase, '_backup')
 class TestStateChange(NIOBlockTestCase):
 
-    def setUp(self):
-        super().setUp()
-        self._signals = None
-
     def get_test_modules(self):
         return self.ServiceDefaultModules + ['persistence']
-
-    def signals_notified(self, signals, output_id='default'):
-        self._signals = signals
 
     def test_state_change(self, mock_backup):
         """ Test that signals get notified only when state changes """
@@ -35,9 +28,9 @@ class TestStateChange(NIOBlockTestCase):
         blk.process_signals([StateSignal('2', 'A')])
         self.assertEqual(blk.get_state('A'), '2')
         self.assert_num_signals_notified(2, blk)
-        self.assertEqual(self._signals[0].prev_state, '1')
-        self.assertEqual(self._signals[0].state, '2')
-        self.assertEqual(self._signals[0].group, 'A')
+        self.assertEqual(self.last_notified['default'][1].prev_state, '1')
+        self.assertEqual(self.last_notified['default'][1].state, '2')
+        self.assertEqual(self.last_notified['default'][1].group, 'A')
         # no notification when state does not change.
         blk.process_signals([StateSignal('2', 'A')])
         self.assertEqual(blk.get_state('A'), '2')
@@ -46,8 +39,8 @@ class TestStateChange(NIOBlockTestCase):
         blk.process_signals([StateSignal('1', 'A')])
         self.assertEqual(blk.get_state('A'), '1')
         self.assert_num_signals_notified(3, blk)
-        self.assertEqual(self._signals[0].prev_state, '2')
-        self.assertEqual(self._signals[0].state, '1')
+        self.assertEqual(self.last_notified['default'][2].prev_state, '2')
+        self.assertEqual(self.last_notified['default'][2].state, '1')
         blk.stop()
 
     def test_no_exclude(self, mock_backup):
@@ -66,10 +59,10 @@ class TestStateChange(NIOBlockTestCase):
         blk.process_signals([StateSignal('2', 'A')])
         self.assertEqual(blk.get_state('A'), '2')
         self.assert_num_signals_notified(2, blk)
-        self.assertEqual(self._signals[0].prev_state, '1')
-        self.assertEqual(self._signals[0].state, '2')
+        self.assertEqual(self.last_notified['default'][1].prev_state, '1')
+        self.assertEqual(self.last_notified['default'][1].state, '2')
         # Make sure that attributes on the original signal also came through
-        self.assertEqual(self._signals[0].group, 'A')
+        self.assertEqual(self.last_notified['default'][1].group, 'A')
         # no notification when state does not change.
         blk.process_signals([StateSignal('2', 'A')])
         self.assertEqual(blk.get_state('A'), '2')
@@ -84,5 +77,5 @@ class TestStateChange(NIOBlockTestCase):
         blk.start()
         # init state to 1
         blk.process_signals([StateSignal(1, 'A')])
-        self.assertDictEqual(self._signals[0].to_dict(),
+        self.assertDictEqual(self.last_notified['default'][0].to_dict(),
                              {'prev_attr': None, 'attr': 1, 'group': 'null'})

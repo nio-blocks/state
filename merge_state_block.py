@@ -30,7 +30,7 @@ class MergeState(StateBase):
             self._logger.debug(
                 "Assigning state {} to signal".format(existing_state))
             setattr(signal, self.state_name, existing_state)
-            to_notify.append(signal)
+            to_notify['default'].append(signal)
 
     def _process_setter_group(self, signals, group, to_notify):
         """ Process the signals from the setter input for a group.
