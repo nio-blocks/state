@@ -67,13 +67,13 @@ When *state* changes, a signal is notifed with attribues *state*, *prev_state*, 
 Relay
 =====
 
-*getter* signals are pass through the block if the last *setter* signal set the state to True. Else, the signals to *getter* are filtered out.
+*getter* signals pass through to the *true* output if the last *setter* signal set the state to True. Else, the signals to *getter* pass through to the *false* output.
 
 Output
 ------
-When *state* is True, input *getter* signals are output
+When *state* is True, input *getter* signals are output to *true* output.
 
-When *state* is False, no signals are output
+When *state* is not True, input *getter* signals are output to *false* output.
 
 ------------------------------------------------------------------------------
 

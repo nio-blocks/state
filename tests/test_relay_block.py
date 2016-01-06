@@ -33,34 +33,39 @@ class TestRelay(NIOBlockTestCase):
         blk.process_signals([StateSignal('1')], input_id='setter')
         self.assertEqual(blk.get_state('null'), '1')
         self.assertTrue(bool(blk.get_state('null')))
-        self.assert_num_signals_notified(0, blk)
+        self.assert_num_signals_notified(0, blk, 'true')
+        self.assert_num_signals_notified(0, blk, 'false')
 
         # send a true state + other signal
         blk.process_signals([StateSignal('2')], input_id='setter')
         blk.process_signals([OtherSignal('3')])
-        self.assert_num_signals_notified(1, blk)
+        self.assert_num_signals_notified(1, blk, 'true')
+        self.assert_num_signals_notified(0, blk, 'false')
         self.assertEqual(blk.get_state('null'), '2')
         self.assertTrue(bool(blk.get_state('null')))
-        self.assertEqual(self.last_notified['default'][0].other, '3')
+        self.assertEqual(self.last_notified['true'][0].other, '3')
 
-        # no signals pass through when State is false
+        # signals pass through to false output when State is false
         blk.process_signals([StateSignal(False)], input_id='setter')
         blk.process_signals([OtherSignal('4')])
         self.assertFalse(bool(blk.get_state('null')))
-        self.assert_num_signals_notified(1, blk)
+        self.assert_num_signals_notified(1, blk, 'true')
+        self.assert_num_signals_notified(1, blk, 'false')
 
-        # no signals still pass through
+        # signals still pass through to false output
         blk.process_signals([OtherSignal(n) for n in range(100)])
         self.assertEqual(blk.get_state('null'), False)
-        self.assert_num_signals_notified(1, blk)
+        self.assert_num_signals_notified(1, blk, 'true')
+        self.assert_num_signals_notified(101, blk, 'false')
 
         # set state to 1 and get notification signal.
         blk.process_signals([StateSignal('1')], input_id='setter')
         blk.process_signals([OtherSignal('5')])
-        self.assert_num_signals_notified(2, blk)
+        self.assert_num_signals_notified(2, blk, 'true')
+        self.assert_num_signals_notified(101, blk, 'false')
         self.assertEqual(blk.get_state('null'), '1')
         self.assertTrue(bool(blk.get_state('null')))
-        self.assertEqual(self.last_notified['default'][1].other, '5')
+        self.assertEqual(self.last_notified['true'][1].other, '5')
         blk.stop()
 
     def test_getter_input(self, mock_backup):
@@ -72,19 +77,22 @@ class TestRelay(NIOBlockTestCase):
             'group_by': 'null'
         })
         blk.start()
-        # initial state is False so signals do not pass through
+        # initial state is False so signals pass through false output
         blk.process_signals([OtherSignal('3')], input_id='getter')
-        self.assert_num_signals_notified(0, blk)
+        self.assert_num_signals_notified(0, blk, 'true')
+        self.assert_num_signals_notified(1, blk, 'false')
         # set state to True
         blk.process_signals([StateSignal('1')], input_id='setter')
         # pass signals through
         blk.process_signals([OtherSignal('3')], input_id='getter')
-        self.assert_num_signals_notified(1, blk)
+        self.assert_num_signals_notified(1, blk, 'true')
+        self.assert_num_signals_notified(1, blk, 'false')
         # set state back to False
         blk.process_signals([StateSignal('')], input_id='setter')
-        # signals do not pass through
+        # signals pass through to false output
         blk.process_signals([OtherSignal('3')], input_id='getter')
-        self.assert_num_signals_notified(1, blk)
+        self.assert_num_signals_notified(1, blk, 'true')
+        self.assert_num_signals_notified(2, blk, 'false')
 
     def test_setter_input(self, mock_backup):
         blk = Relay()
@@ -105,4 +113,5 @@ class TestRelay(NIOBlockTestCase):
         self.assertEqual(blk.get_state('null'), '')
         self.assertFalse(bool(blk.get_state('null')))
         # no signals were notified
-        self.assert_num_signals_notified(0, blk)
+        self.assert_num_signals_notified(0, blk, 'true')
+        self.assert_num_signals_notified(0, blk, 'false')
