@@ -1,16 +1,16 @@
 from copy import copy
 from collections import defaultdict
-from nio.common.signal.base import Signal
-from nio.common.block.base import Block
-from nio.common.command import command
-from nio.common.command.params.string import StringParameter
-from nio.metadata.properties import ExpressionProperty, TimeDeltaProperty, \
+from nio.signal.base import Signal
+from nio.block.base import Block
+from nio.command import command
+from nio.command.params.string import StringParameter
+from nio.properties import Property, TimeDeltaProperty, \
     BoolProperty
-from nio.metadata.properties.version import VersionProperty
+from nio.properties.version import VersionProperty
 from nio.modules.scheduler import Job
-from nio.modules.threading import Lock
+from threading import Lock
 from nio.modules.web.http import HTTPNotFound
-from .mixins.group_by.group_by_block import GroupBy
+from nio.block.mixins.group_by.group_by import GroupBy
 
 
 @command('current_state', StringParameter("group", allow_none=True))
@@ -18,14 +18,14 @@ class StateBase(GroupBy, Block):
 
     """ A base block mixin for keeping track of state """
 
-    state_expr = ExpressionProperty(
-        title='State Expression', default='{{ $state }}')
+    state_expr = Property(
+        title='State ', default='{{ $state }}', allow_none=True)
     use_persistence = BoolProperty(title="Use Persistence", default=True)
-    initial_state = ExpressionProperty(
-        title='Initial State', default='{{ None }}')
+    initial_state = Property(
+        title='Initial State', default='{{ None }}', allow_none=True)
 
     # Hidden properties
-    version = VersionProperty(default='1.0.1', min_version='1.0.0')
+    version = VersionProperty('0.1.0')
     backup_interval = TimeDeltaProperty(
         title='Backup Interval', default={'seconds': 600}, visible=False)
 
@@ -45,12 +45,12 @@ class StateBase(GroupBy, Block):
 
         # We want to check if the persistence has the key, not check the loaded
         # value. This allows us to persist False-y states
-        if self.use_persistence and self.persistence.has_key('states'):
+        if self.use_persistence() and self.persistence.has_key('states'):
             self._states = self.persistence.load('states')
 
     def start(self):
         super().start()
-        self._backup_job = Job(self._backup, self.backup_interval, True)
+        self._backup_job = Job(self._backup, self.backup_interval(), True)
 
     def stop(self):
         self._backup_job.cancel()
@@ -78,7 +78,7 @@ class StateBase(GroupBy, Block):
         Most likely, _process_group will be overridden in subclasses instead
         of this method.
         """
-        self._logger.debug(
+        self.logger.debug(
             "Ready to process {} incoming signals".format(len(signals)))
         signals_to_notify = defaultdict(list)
         with self._safe_lock:
@@ -133,14 +133,14 @@ class StateBase(GroupBy, Block):
                 new_state = self.state_expr(signal)
             except:
                 # expression failed so don't set a state.
-                self._logger.exception(
+                self.logger.exception(
                     "State Change failed for group {}".format(group))
                 return
 
             if new_state != prev_state:
                 # notify signal if there was a prev_state and
                 # the state has changed.
-                self._logger.debug(
+                self.logger.debug(
                     "Changing state from {} to {} for group {}".format(
                         prev_state, new_state, group))
                 self._states[group] = new_state
@@ -149,7 +149,7 @@ class StateBase(GroupBy, Block):
 
     def _backup(self):
         """ Persist the current state using the persistence module. """
-        self._logger.debug("Attempting to persist the current states")
+        self.logger.debug("Attempting to persist the current states")
         self.persistence.store("states", self._states)
         self.persistence.save()
 

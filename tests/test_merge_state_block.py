@@ -1,6 +1,6 @@
 from unittest.mock import patch
-from nio.util.support.block_test_case import NIOBlockTestCase
-from nio.common.signal.base import Signal
+from nio.testing.block_test_case import NIOBlockTestCase
+from nio.signal.base import Signal
 from .test_state_base_block import StateSignal
 from ..merge_state_block import MergeState
 

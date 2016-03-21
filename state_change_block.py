@@ -1,10 +1,10 @@
 from .state_base_block import StateBase
-from nio.common.discovery import Discoverable, DiscoverableType
-from nio.common.signal.base import Signal
-from nio.metadata.properties import BoolProperty, StringProperty
+from nio.util.discovery import discoverable
+from nio.signal.base import Signal
+from nio.properties import BoolProperty, StringProperty
 
 
-@Discoverable(DiscoverableType.block)
+@discoverable
 class StateChange(StateBase):
 
     """ Notifies a signal on *state* change.
@@ -32,11 +32,11 @@ class StateChange(StateBase):
 
                 # If we are excluding existing fields we want to add
                 # the states and previous states to an empty signal
-                if self.exclude:
+                if self.exclude():
                     signal = Signal()
 
                 setattr(signal,
-                        'prev_{}'.format(self.state_name), state_change[0])
-                setattr(signal, '{}'.format(self.state_name), state_change[1])
+                        'prev_{}'.format(self.state_name()), state_change[0])
+                setattr(signal, '{}'.format(self.state_name()), state_change[1])
                 setattr(signal, 'group', group)
                 to_notify['default'].append(signal)

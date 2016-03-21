@@ -2,14 +2,14 @@ from unittest.mock import patch
 from ..state_base_block import StateBase
 from ..state_change_block import StateChange
 from .test_state_base_block import StateSignal
-from nio.util.support.block_test_case import NIOBlockTestCase
+from nio.testing.block_test_case import NIOBlockTestCase
 
 
 @patch.object(StateBase, '_backup')
 class TestStateChange(NIOBlockTestCase):
 
-    def get_test_modules(self):
-        return self.ServiceDefaultModules + ['persistence']
+    #def get_test_modules(self):
+    #    return self.ServiceDefaultModules + ['persistence']
 
     def test_state_change(self, mock_backup):
         """ Test that signals get notified only when state changes """

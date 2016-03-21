@@ -1,7 +1,7 @@
 from unittest.mock import patch
-from nio.util.support.block_test_case import NIOBlockTestCase
+from nio.testing.block_test_case import NIOBlockTestCase
 from .test_state_base_block import StateSignal
-from nio.common.signal.base import Signal
+from nio.signal.base import Signal
 from ..relay_block import Relay
 
 
