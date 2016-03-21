@@ -7,7 +7,6 @@ from nio.command.params.string import StringParameter
 from nio.properties import Property, TimeDeltaProperty, \
     BoolProperty
 from nio.properties.version import VersionProperty
-from nio.modules.scheduler import Job
 from threading import Lock
 from nio.modules.web.http import HTTPNotFound
 from nio.block.mixins.group_by.group_by import GroupBy
@@ -20,7 +19,6 @@ class StateBase(GroupBy, Block):
 
     state_expr = Property(
         title='State ', default='{{ $state }}', allow_none=True)
-    use_persistence = BoolProperty(title="Use Persistence", default=True)
     initial_state = Property(
         title='Initial State', default='{{ None }}', allow_none=True)
 
@@ -32,30 +30,14 @@ class StateBase(GroupBy, Block):
     def __init__(self):
         super().__init__()
         self._initial_state = None
-        self._backup_job = None
         self._state_locks = defaultdict(Lock)
         self._safe_lock = Lock()
         self._states = {}
 
     def configure(self, context):
         super().configure(context)
-
         # Store a cached copy of what a new state should look like
         self._initial_state = self.initial_state(Signal())
-
-        # We want to check if the persistence has the key, not check the loaded
-        # value. This allows us to persist False-y states
-        if self.use_persistence() and self.persistence.has_key('states'):
-            self._states = self.persistence.load('states')
-
-    def start(self):
-        super().start()
-        self._backup_job = Job(self._backup, self.backup_interval(), True)
-
-    def stop(self):
-        self._backup_job.cancel()
-        self._backup()
-        super().stop()
 
     def get_state(self, group):
         """ Return the current state for a group.
@@ -66,10 +48,9 @@ class StateBase(GroupBy, Block):
         """
         if group not in self._states:
             self._states[group] = copy(self._initial_state)
-
         return self._states[group]
 
-    def process_signals(self, signals, input_id='default'):
+    def process_signals(self, signals, input_id=None):
         """ Process incoming signals.
 
         This block is a helper, it will just call _process_group and
@@ -82,39 +63,25 @@ class StateBase(GroupBy, Block):
             "Ready to process {} incoming signals".format(len(signals)))
         signals_to_notify = defaultdict(list)
         with self._safe_lock:
-            if input_id == 'default' or input_id == 'getter':
-                self.for_each_group(
-                    self._process_group,
-                    signals,
-                    kwargs={"to_notify": signals_to_notify})
-            elif input_id == 'setter':
-                self.for_each_group(
-                    self._process_setter_group,
-                    signals,
-                    kwargs={"to_notify": signals_to_notify})
-        for signal_list in signals_to_notify:
-            self.notify_signals(signals_to_notify[signal_list],
-                                output_id=signal_list)
+            group_result = self.for_each_group(
+                self._process_group, signals, input_id=input_id,
+                signals_to_notify=signals_to_notify)
+            if group_result:
+                signals_to_notify[None] = group_result
+        for output_id in signals_to_notify:
+            if output_id:
+                self.notify_signals(signals_to_notify[output_id],
+                                    output_id=output_id)
+            else:
+                self.notify_signals(signals_to_notify[output_id])
 
-    def _process_group(self, signals, group, to_notify):
+    def _process_group(self, signals, group, input_id, signals_to_notify=None):
         """ Implement this method in subclasses to process signals in a group.
 
-        Add any signals that you wish to notify to the to_notify list.
-
-        No return value is necessary
-
-        This method is for signals that come in the 'default' input.
-        """
-        pass
-
-    def _process_setter_group(self, signals, group, to_notify):
-        """ Implement this method in subclasses to process signals in a group.
-
-        Add any signals that you wish to notify to the to_notify list.
-
-        No return value is necessary
-
-        This method is for signals that come in the 'setter' input.
+        Return:
+            list or dict(list): The list of signals to be nofified. If
+                notifying to a non-default input, return a dict with the key
+                as the output id.
         """
         pass
 
@@ -146,12 +113,6 @@ class StateBase(GroupBy, Block):
                 self._states[group] = new_state
 
                 return (prev_state, new_state)
-
-    def _backup(self):
-        """ Persist the current state using the persistence module. """
-        self.logger.debug("Attempting to persist the current states")
-        self.persistence.store("states", self._states)
-        self.persistence.save()
 
     def current_state(self, group):
         """ Command that returns the current state of a group """
