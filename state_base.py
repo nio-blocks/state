@@ -3,7 +3,8 @@ from collections import defaultdict
 from nio.signal.base import Signal
 from nio.block.base import Block
 from nio.command import command
-from nio.command.params.string import StringParameter
+from nio.types.base import Type
+from nio.command.params.base import Parameter
 from nio.properties import Property, TimeDeltaProperty, \
     BoolProperty
 from nio.properties.version import VersionProperty
@@ -12,7 +13,7 @@ from nio.modules.web.http import HTTPNotFound
 from nio.block.mixins.group_by.group_by import GroupBy
 
 
-@command('current_state', StringParameter("group", allow_none=True))
+@command('current_state', Parameter(Type, "group", allow_none=True))
 class StateBase(GroupBy, Block):
 
     """ A base block mixin for keeping track of state """
