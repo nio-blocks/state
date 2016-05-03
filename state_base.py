@@ -3,17 +3,19 @@ from collections import defaultdict
 from nio.signal.base import Signal
 from nio.block.base import Block
 from nio.command import command
-from nio.command.params.string import StringParameter
+from nio.types.base import Type
+from nio.command.params.base import Parameter
 from nio.properties import Property, TimeDeltaProperty, \
     BoolProperty
 from nio.properties.version import VersionProperty
 from threading import Lock
 from nio.modules.web.http import HTTPNotFound
 from nio.block.mixins.group_by.group_by import GroupBy
+from nio.block.mixins.persistence.persistence import Persistence
 
 
-@command('current_state', StringParameter("group", allow_none=True))
-class StateBase(GroupBy, Block):
+@command('current_state', Parameter(Type, "group", allow_none=True))
+class StateBase(Persistence, GroupBy, Block):
 
     """ A base block mixin for keeping track of state """
 
@@ -21,11 +23,7 @@ class StateBase(GroupBy, Block):
         title='State ', default='{{ $state }}', allow_none=True)
     initial_state = Property(
         title='Initial State', default='{{ None }}', allow_none=True)
-
-    # Hidden properties
     version = VersionProperty('0.1.0')
-    backup_interval = TimeDeltaProperty(
-        title='Backup Interval', default={'seconds': 600}, visible=False)
 
     def __init__(self):
         super().__init__()
@@ -33,6 +31,10 @@ class StateBase(GroupBy, Block):
         self._state_locks = defaultdict(Lock)
         self._safe_lock = Lock()
         self._states = {}
+
+    def persisted_values(self):
+        """Persist states using block mixin."""
+        return ["_states"]
 
     def configure(self, context):
         super().configure(context)
