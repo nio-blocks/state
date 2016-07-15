@@ -15,8 +15,8 @@ Properties
 ---------
 
 -   **state_expr**: (expression) Property that evalues to *state*. If the expression cannot be evaluated, the *state* will not change.
--   **initial_state**: (expression) What the initial state should be
--   **use_persistence**: (bool) Whether to load the initial state from persistence
+-   **initial_state**: (expression) The *state* when none has been set by an incoming signal. If the **initial_state** is a python expression, it is evaluated at configuration. For example, if the **initial_state** is configured as `{{ datetime.datetime.utctime() }}`, the value of **intial_state** will the be time at configuration.
+-   **use_persistence**: (bool) Whether to load the **initial_state** from persistence
 -   **group_by**: (expression) What to group the signals by. A different state will be maintained for each group
 -   **backup_interval** (seconds=600): Inteval at which *state* is saved to disk.
 
