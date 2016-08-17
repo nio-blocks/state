@@ -18,7 +18,7 @@ Properties
 -   **initial_state**: (expression) What the initial state should be
 -   **use_persistence**: (bool) Whether to load the initial state from persistence
 -   **group_by**: (expression) What to group the signals by. A different state will be maintained for each group
--   **backup_interval** (seconds=600): Inteval at which *state* is saved to disk.
+-   **backup_interval** (seconds=600): Interval at which *state* is saved to disk.
 
 Dependencies
 ------------
@@ -26,14 +26,14 @@ None
 
 Commands
 --------
--   **current_state** (parameter: group): Gets the current state for a given group. Response is a dictionary with "state" and "group" keys. If 'group' is not specified then a list is returned with a dictionary for each group. If the specified group does not exist, then an empty dicitonary is returned.
+-   **current_state** (parameter: group): Gets the current state for a given group. Response is a dictionary with "state" and "group" keys. If `group` is not specified then a list is returned with a dictionary for each group. If the specified `group` does not exist, then an empty dicitonary is returned.
 
 Input
 -----
 
 ### getter (default)
 
-Any list of signals. Signal that _get_ a state and/or pass through the block.
+Any list of signals. Signals that _get_ a state and/or pass through the block.
 
 ### setter
 
@@ -48,7 +48,7 @@ Depends on the individual block
 StateChange
 ============
 
-Maintains a *state* and when *state* changes, a signal is notified that containes the *state* and *prev_state*.
+Maintains a *state*, and when *state* changes, a signal is notified that containes the *state* and *prev_state*.
 
 
 Additional Properties
