@@ -5,15 +5,16 @@ from nio.block.base import Block
 from nio.command import command
 from nio.types.base import Type
 from nio.command.params.base import Parameter
-from nio.properties import Property, TimeDeltaProperty, \
-    BoolProperty
+from nio.properties import Property
 from nio.properties.version import VersionProperty
 from threading import Lock
 from nio.modules.web.http import HTTPNotFound
 from nio.block.mixins.group_by.group_by import GroupBy
 from nio.block.mixins.persistence.persistence import Persistence
+from nio.util.discovery import not_discoverable
 
 
+@not_discoverable
 @command('current_state', Parameter(Type, "group", allow_none=True))
 class StateBase(Persistence, GroupBy, Block):
 
