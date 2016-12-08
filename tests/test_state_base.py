@@ -1,7 +1,7 @@
 from unittest.mock import patch, MagicMock
-from ..state_base_block import StateBase
-from nio.common.signal.base import Signal
-from nio.util.support.block_test_case import NIOBlockTestCase
+from nio.signal.base import Signal
+from nio.testing.block_test_case import NIOBlockTestCase
+from ..state_base import StateBase
 
 
 class StateSignal(Signal):
@@ -12,13 +12,9 @@ class StateSignal(Signal):
         self.group = group
 
 
-@patch.object(StateBase, '_backup')
 class TestStateBase(NIOBlockTestCase):
 
-    def get_test_modules(self):
-        return self.ServiceDefaultModules + ['persistence']
-
-    def test_saves_state(self, mock_backup):
+    def test_saves_state(self):
         """ Tests that the block saves states properly """
         blk = StateBase()
         self.configure_block(blk, {
@@ -39,7 +35,7 @@ class TestStateBase(NIOBlockTestCase):
         self.assertEqual(3, blk.get_state('A'))
         self.assertEqual(2, blk.get_state('B'))
 
-    def test_process_return(self, mock_backup):
+    def test_process_return(self):
         """ Tests that process_state returns the correct values """
         blk = StateBase()
         self.configure_block(blk, {
@@ -64,7 +60,7 @@ class TestStateBase(NIOBlockTestCase):
         self.assertEqual(1, process_out[0])  # previous state
         self.assertEqual(5, process_out[1])  # new state
 
-    def test_bad_expr(self, mock_backup):
+    def test_bad_expr(self):
         """ Tests that the block won't save a state it can't evaluate """
         blk = StateBase()
         self.configure_block(blk, {
@@ -80,7 +76,7 @@ class TestStateBase(NIOBlockTestCase):
         blk._process_state(StateSignal('hello'), 'A')
         self.assertIsNone(blk.get_state('A'))
 
-    def test_process_signals(self, mock_backup):
+    def test_process_signals(self):
         """ Test that process signals properly calls process_group """
         blk = StateBase()
         self.configure_block(blk, {
@@ -98,7 +94,7 @@ class TestStateBase(NIOBlockTestCase):
         self.assertEqual(blk._process_group.call_count, 3)
         blk.stop()
 
-    def test_current_state_command(self, mock_backup):
+    def test_current_state_command(self):
         """ Test the current_state block command """
         blk = StateBase()
         self.configure_block(blk, {})
