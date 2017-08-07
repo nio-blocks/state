@@ -45,8 +45,10 @@ class TestMergeState(NIOBlockTestCase):
         signals_notified += 100
         self.assertEqual(blk.get_state(None), '2')
         self.assert_num_signals_notified(signals_notified, blk)
-        self.assertEqual(len(self.last_notified[DEFAULT_TERMINAL]), signals_notified)
-        [self.assertEqual(n.mstate, '2') for n in self.last_notified[DEFAULT_TERMINAL]]
+        self.assertEqual(
+            len(self.last_notified[DEFAULT_TERMINAL]), signals_notified)
+        [self.assertEqual(n.mstate, '2')
+         for n in self.last_notified[DEFAULT_TERMINAL]]
 
         blk.stop()
 

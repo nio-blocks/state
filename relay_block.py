@@ -1,7 +1,5 @@
-from collections import defaultdict
 from nio.block.terminals import input, output
-from nio.properties import Property, VersionProperty
-from nio.util.discovery import discoverable
+from nio.properties import VersionProperty
 from .state_base import StateBase
 
 
@@ -9,7 +7,6 @@ from .state_base import StateBase
 @input('getter')
 @output('false')
 @output('true')
-@discoverable
 class Relay(StateBase):
 
     """ Passthrough *getter* signals if the state is True.

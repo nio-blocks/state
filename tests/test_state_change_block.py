@@ -25,7 +25,8 @@ class TestStateChange(NIOBlockTestCase):
         blk.process_signals([StateSignal('2', 'A')])
         self.assertEqual(blk.get_state('A'), '2')
         self.assert_num_signals_notified(2, blk)
-        self.assertEqual(self.last_notified[DEFAULT_TERMINAL][1].prev_state, '1')
+        self.assertEqual(
+            self.last_notified[DEFAULT_TERMINAL][1].prev_state, '1')
         self.assertEqual(self.last_notified[DEFAULT_TERMINAL][1].state, '2')
         self.assertEqual(self.last_notified[DEFAULT_TERMINAL][1].group, 'A')
         # no notification when state does not change.
@@ -36,7 +37,8 @@ class TestStateChange(NIOBlockTestCase):
         blk.process_signals([StateSignal('1', 'A')])
         self.assertEqual(blk.get_state('A'), '1')
         self.assert_num_signals_notified(3, blk)
-        self.assertEqual(self.last_notified[DEFAULT_TERMINAL][2].prev_state, '2')
+        self.assertEqual(
+            self.last_notified[DEFAULT_TERMINAL][2].prev_state, '2')
         self.assertEqual(self.last_notified[DEFAULT_TERMINAL][2].state, '1')
         blk.stop()
 
@@ -56,7 +58,8 @@ class TestStateChange(NIOBlockTestCase):
         blk.process_signals([StateSignal('2', 'A')])
         self.assertEqual(blk.get_state('A'), '2')
         self.assert_num_signals_notified(2, blk)
-        self.assertEqual(self.last_notified[DEFAULT_TERMINAL][1].prev_state, '1')
+        self.assertEqual(
+            self.last_notified[DEFAULT_TERMINAL][1].prev_state, '1')
         self.assertEqual(self.last_notified[DEFAULT_TERMINAL][1].state, '2')
         # Make sure that attributes on the original signal also came through
         self.assertEqual(self.last_notified[DEFAULT_TERMINAL][1].group, 'A')
