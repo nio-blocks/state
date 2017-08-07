@@ -51,14 +51,15 @@
     },
     "commands": {
       "current_state": {
-        "description": ""
-      },
-      "groups": {
-        "description": ""
+        "description": "Get the current state of the block is applying to the signals",
+        "params": {
+          "group": "The group of signals to get the state of",
+          "allow_none": true
+        }
       }
     }
   },
-    "nio/Relay": {
+  "nio/Relay": {
     "version": "0.1.0",
     "description": "getter signals pass through to the *true* output if the last *setter* signal set the state to `True`. Else, the signals to getter pass through to the false output.",
     "properties": {
@@ -99,19 +100,20 @@
       }
     },
     "outputs": {
-      "true": {
-        "description": "getter signals pass through to the true output if the last setter signal set the state to `True`"
-      },
       "false": {
         "description": "getter signals pass through to the false output by default until state is changed to `True`."
+      },
+      "true": {
+        "description": "getter signals pass through to the true output if the last setter signal set the state to `True`"
       }
     },
     "commands": {
       "current_state": {
-        "description": ""
-      },
-      "groups": {
-        "description": ""
+        "description": "Get the current state of the block is applying to the signals",
+        "params": {
+          "group": "The group of signals to get the state of",
+          "allow_none": true
+        }
       }
     }
   },
@@ -169,7 +171,11 @@
     },
     "commands": {
       "current_state": {
-        "description": "Gets the current state for a given group. Response is a dictionary with `state` and `group` keys. If `group` is not specified, then a list is returned with a dictionary for each group. If the specified group does not exist, then an empty dictionary is returned."
+        "description": "Get the current state of the block is applying to the signals",
+        "params": {
+          "group": "The group of signals to get the state of",
+          "allow_none": true
+        }
       }
     }
   }
