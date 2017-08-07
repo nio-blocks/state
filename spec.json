@@ -1,61 +1,4 @@
 {
-  "nio/Relay": {
-    "version": "0.1.0",
-    "description": "getter signals pass through to the *true* output if the last *setter* signal set the state to `True`. Else, the signals to getter pass through to the false output.",
-    "properties": {
-      "backup_interval": {
-        "title": "Backup Interval",
-        "description": "Interval at which state is saved to disk.",
-        "default": {
-          "seconds": 3600
-        }
-      },
-      "group_by": {
-        "title": "Group By",
-        "description": "What to group the signals by. A different state will be maintained for each group",
-        "default": null
-      },
-      "initial_state": {
-        "title": "Initial State",
-        "description": "The state when none has been set by an incoming signal. If the `initial_state` is a python expression, it is evaluated at configuration. For example, if the `initial_state` is configured as `{{ datetime.datetime.utctime() }}`, the value of `initial_state` will the be time at configuration.",
-        "default": "{{ None }}"
-      },
-      "load_from_persistence": {
-        "title": "Load from Persistence?",
-        "description": "Upon restart, block will load the previous state and resume operation as if restart did not happen.",
-        "default": true
-      },
-      "state_expr": {
-        "title": "State ",
-        "description": "Property that evaluates to state. If the expression cannot be evaluated, the state will not change.",
-        "default": "{{ $state }}"
-      }
-    },
-    "inputs": {
-      "getter": {
-        "description": "Any list of signals. Signals that get assigned a state and/or pass through the block."
-      },
-      "setter": {
-        "description": "Signals passed to this input set the state of the block. Each signal is evaluated against `state_expr` to determine the new state of the block for the signal's group."
-      }
-    },
-    "outputs": {
-      "true": {
-        "description": "getter signals pass through to the true output if the last setter signal set the state to `True`"
-      },
-      "false": {
-        "description": "getter signals pass through to the false output by default until state is changed to `True`."
-      }
-    },
-    "commands": {
-      "current_state": {
-        "description": ""
-      },
-      "groups": {
-        "description": ""
-      }
-    }
-  },
   "nio/MergeState": {
     "version": "0.1.0",
     "description": "Maintains a **state** and merges that state (with name `state_name`) with signals that are input through the getter input.",
@@ -104,6 +47,63 @@
     "outputs": {
       "default": {
         "description": "Non state setting signals are passed through with state set to the attribute `state_name`."
+      }
+    },
+    "commands": {
+      "current_state": {
+        "description": ""
+      },
+      "groups": {
+        "description": ""
+      }
+    }
+  },
+    "nio/Relay": {
+    "version": "0.1.0",
+    "description": "getter signals pass through to the *true* output if the last *setter* signal set the state to `True`. Else, the signals to getter pass through to the false output.",
+    "properties": {
+      "backup_interval": {
+        "title": "Backup Interval",
+        "description": "Interval at which state is saved to disk.",
+        "default": {
+          "seconds": 3600
+        }
+      },
+      "group_by": {
+        "title": "Group By",
+        "description": "What to group the signals by. A different state will be maintained for each group",
+        "default": null
+      },
+      "initial_state": {
+        "title": "Initial State",
+        "description": "The state when none has been set by an incoming signal. If the `initial_state` is a python expression, it is evaluated at configuration. For example, if the `initial_state` is configured as `{{ datetime.datetime.utctime() }}`, the value of `initial_state` will the be time at configuration.",
+        "default": "{{ None }}"
+      },
+      "load_from_persistence": {
+        "title": "Load from Persistence?",
+        "description": "Upon restart, block will load the previous state and resume operation as if restart did not happen.",
+        "default": true
+      },
+      "state_expr": {
+        "title": "State ",
+        "description": "Property that evaluates to state. If the expression cannot be evaluated, the state will not change.",
+        "default": "{{ $state }}"
+      }
+    },
+    "inputs": {
+      "getter": {
+        "description": "Any list of signals. Signals that get assigned a state and/or pass through the block."
+      },
+      "setter": {
+        "description": "Signals passed to this input set the state of the block. Each signal is evaluated against `state_expr` to determine the new state of the block for the signal's group."
+      }
+    },
+    "outputs": {
+      "true": {
+        "description": "getter signals pass through to the true output if the last setter signal set the state to `True`"
+      },
+      "false": {
+        "description": "getter signals pass through to the false output by default until state is changed to `True`."
       }
     },
     "commands": {
@@ -170,9 +170,6 @@
     "commands": {
       "current_state": {
         "description": "Gets the current state for a given group. Response is a dictionary with `state` and `group` keys. If `group` is not specified, then a list is returned with a dictionary for each group. If the specified group does not exist, then an empty dictionary is returned."
-      },
-      "groups": {
-        "description": ""
       }
     }
   }
