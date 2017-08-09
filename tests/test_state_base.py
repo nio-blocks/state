@@ -116,5 +116,5 @@ class TestStateBase(NIOBlockTestCase):
         # And all states
         self.assertListEqual(
             sorted(blk.current_state(group=None), key=lambda k: k['group']),
-                   [{'group': 'A', 'state': 2}, {'group': 'B', 'state': 1}])
+            [{'group': 'A', 'state': 2}, {'group': 'B', 'state': 1}])
         blk.stop()

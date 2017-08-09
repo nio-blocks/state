@@ -1,10 +1,8 @@
 from nio.properties import BoolProperty, StringProperty
 from nio.signal.base import Signal
-from nio.util.discovery import discoverable
 from .state_base import StateBase
 
 
-@discoverable
 class StateChange(StateBase):
 
     """ Notifies a signal on *state* change.
@@ -33,7 +31,8 @@ class StateChange(StateBase):
                     signal = Signal()
                 setattr(signal,
                         'prev_{}'.format(self.state_name()), state_change[0])
-                setattr(signal, '{}'.format(self.state_name()), state_change[1])
+                setattr(signal, '{}'.format(
+                    self.state_name()), state_change[1])
                 setattr(signal, 'group', group)
                 signals_to_notify.append(signal)
         return signals_to_notify

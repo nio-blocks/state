@@ -1,14 +1,10 @@
 from .state_base import StateBase
 from nio.block.terminals import input
-from nio.util.discovery import discoverable
-from nio.properties import Property
-from nio.properties import Property, StringProperty, \
-    VersionProperty
+from nio.properties import StringProperty, VersionProperty
 
 
 @input('setter')
 @input('getter')
-@discoverable
 class MergeState(StateBase):
 
     """ Merge the *setter* state into *getter* signals.
