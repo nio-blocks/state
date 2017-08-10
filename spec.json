@@ -5,6 +5,7 @@
     "properties": {
       "backup_interval": {
         "title": "Backup Interval",
+        "type": "TimeDeltaType",
         "description": "Interval at which state is saved to disk.",
         "default": {
           "seconds": 3600
@@ -12,26 +13,31 @@
       },
       "group_by": {
         "title": "Group By",
+        "type": "Type",
         "description": "What to group the signals by. A different state will be maintained for each group",
         "default": null
       },
       "initial_state": {
         "title": "Initial State",
+        "type": "Type",
         "description": "The state when none has been set by an incoming signal. If the `initial_state` is a python expression, it is evaluated at configuration. For example, if the `initial_state` is configured as `{{ datetime.datetime.utctime() }}`, the value of `initial_state` will the be time at configuration.",
         "default": "{{ None }}"
       },
       "load_from_persistence": {
         "title": "Load from Persistence?",
+        "type": "BoolType",
         "description": "Upon restart, block will load the previous state and resume operation as if restart did not happen.",
         "default": true
       },
       "state_expr": {
         "title": "State ",
+        "type": "Type",
         "description": "Property that evaluates to state. If the expression cannot be evaluated, the state will not change.",
         "default": "{{ $state }}"
       },
       "state_name": {
         "title": "State Name",
+        "type": "StringType",
         "description": "String property that is the name of the appended state",
         "default": "state"
       }
@@ -51,11 +57,18 @@
     },
     "commands": {
       "current_state": {
-        "description": "Get the current state of the block is applying to the signals",
         "params": {
-          "group": "The group of signals to get the state of",
-          "allow_none": true
-        }
+          "group": {
+            "title": "group",
+            "default": null,
+            "allow_none": true
+          }
+        },
+        "description": "Get the current state of the block is applying to the signals"
+      },
+      "groups": {
+        "params": {},
+        "description": "Display the current groupings of signals."
       }
     }
   },
@@ -65,6 +78,7 @@
     "properties": {
       "backup_interval": {
         "title": "Backup Interval",
+        "type": "TimeDeltaType",
         "description": "Interval at which state is saved to disk.",
         "default": {
           "seconds": 3600
@@ -72,21 +86,25 @@
       },
       "group_by": {
         "title": "Group By",
+        "type": "Type",
         "description": "What to group the signals by. A different state will be maintained for each group",
         "default": null
       },
       "initial_state": {
         "title": "Initial State",
+        "type": "Type",
         "description": "The state when none has been set by an incoming signal. If the `initial_state` is a python expression, it is evaluated at configuration. For example, if the `initial_state` is configured as `{{ datetime.datetime.utctime() }}`, the value of `initial_state` will the be time at configuration.",
         "default": "{{ None }}"
       },
       "load_from_persistence": {
         "title": "Load from Persistence?",
+        "type": "BoolType",
         "description": "Upon restart, block will load the previous state and resume operation as if restart did not happen.",
         "default": true
       },
       "state_expr": {
         "title": "State ",
+        "type": "Type",
         "description": "Property that evaluates to state. If the expression cannot be evaluated, the state will not change.",
         "default": "{{ $state }}"
       }
@@ -109,11 +127,18 @@
     },
     "commands": {
       "current_state": {
-        "description": "Get the current state of the block is applying to the signals",
         "params": {
-          "group": "The group of signals to get the state of",
-          "allow_none": true
-        }
+          "group": {
+            "title": "group",
+            "default": null,
+            "allow_none": true
+          }
+        },
+        "description": "Get the current state of the block is applying to the signals"
+      },
+      "groups": {
+        "params": {},
+        "description": "Display the current groupings of signals."
       }
     }
   },
@@ -123,6 +148,7 @@
     "properties": {
       "backup_interval": {
         "title": "Backup Interval",
+        "type": "TimeDeltaType",
         "description": "Interval at which state is saved to disk.",
         "default": {
           "seconds": 3600
@@ -130,31 +156,37 @@
       },
       "exclude": {
         "title": "Exclude Existing Fields",
+        "type": "BoolType",
         "description": "Select whether you want to exclude other signals. If checked, the only output will be `state` and `prev_state`. If not checked, `state` and `prev_state` will be appended onto the incoming signal.",
         "default": true
       },
       "group_by": {
         "title": "Group By",
+        "type": "Type",
         "description": "What to group the signals by. A different state will be maintained for each group",
         "default": null
       },
       "initial_state": {
         "title": "Initial State",
+        "type": "Type",
         "description": "The state when none has been set by an incoming signal. If the `initial_state` is a python expression, it is evaluated at configuration. For example, if the `initial_state` is configured as `{{ datetime.datetime.utctime() }}`, the value of `initial_state` will the be time at configuration.",
         "default": "{{ None }}"
       },
       "load_from_persistence": {
         "title": "Load from Persistence?",
+        "type": "BoolType",
         "description": "Upon restart, block will load the previous state and resume operation as if restart did not happen.",
         "default": true
       },
       "state_expr": {
         "title": "State ",
+        "type": "Type",
         "description": "Property that evaluates to state. If the expression cannot be evaluated, the state will not change.",
         "default": "{{ $state }}"
       },
       "state_name": {
         "title": "State Name",
+        "type": "StringType",
         "description": "String property that is the name of the appended state",
         "default": "state"
       }
@@ -171,11 +203,18 @@
     },
     "commands": {
       "current_state": {
-        "description": "Get the current state of the block is applying to the signals",
         "params": {
-          "group": "The group of signals to get the state of",
-          "allow_none": true
-        }
+          "group": {
+            "title": "group",
+            "default": null,
+            "allow_none": true
+          }
+        },
+        "description": "Get the current state of the block is applying to the signals"
+      },
+      "groups": {
+        "params": {},
+        "description": "Display the current groupings of signals."
       }
     }
   }
