@@ -2,16 +2,16 @@
   "nio/MergeState": {
     "language": "Python",
     "version": "0.1.0",
-    "reference": "github.com/nio-blocks/state_change.git@v0.1.0"
+    "url": "git://github.com/nio-blocks/state_change.git"
   },
   "nio/Relay": {
     "language": "Python",
     "version": "0.1.0",
-    "reference": "github.com/nio-blocks/state_change.git@v0.1.0"
+    "url": "git://github.com/nio-blocks/state_change.git"
   },
   "nio/StateChange": {
     "language": "Python",
     "version": "0.1.0",
-    "reference": "github.com/nio-blocks/state_change.git@v0.1.0"
+    "url": "git://github.com/nio-blocks/state_change.git"
   }
 }
