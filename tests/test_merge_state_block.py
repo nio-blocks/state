@@ -64,7 +64,6 @@ class TestMergeState(NIOBlockTestCase):
         blk.start()
         # getter should get initial statue of False
         blk.process_signals([OtherSignal('3')], input_id='getter')
-        print(self.last_notified[DEFAULT_TERMINAL])
         self.assertEqual(self.last_notified[DEFAULT_TERMINAL][0].mstate, False)
         self.assert_num_signals_notified(1, blk)
         # set state to '1'

@@ -18,5 +18,10 @@
     "language": "Python",
     "url": "git://github.com//nio-blocks/state_change.git",
     "version": "0.1.0"
+  },
+  "nio/Switch": {
+    "language": "Python",
+    "url": "git://github.com//nio-blocks/state_change.git",
+    "version": "0.1.0"
   }
 }

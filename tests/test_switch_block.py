@@ -3,7 +3,7 @@ from nio.block.terminals import DEFAULT_TERMINAL
 from nio.signal.base import Signal
 from nio.testing.block_test_case import NIOBlockTestCase
 from .test_state_base import StateSignal
-from ..relay_block_deprecated import Relay
+from ..switch_block import Switch
 
 
 class OtherSignal(Signal):
@@ -13,10 +13,10 @@ class OtherSignal(Signal):
         self.other = state
 
 
-class TestRelay(NIOBlockTestCase):
+class TestSwitch(NIOBlockTestCase):
 
-    def test_relay(self):
-        blk = Relay()
+    def test_switch(self):
+        blk = Switch()
         self.configure_block(blk, {
             'state_expr': '{{ $state }}',
             'initial_state': '{{ False }}',
@@ -66,7 +66,7 @@ class TestRelay(NIOBlockTestCase):
         blk.stop()
 
     def test_getter_input(self):
-        blk = Relay()
+        blk = Switch()
         self.configure_block(blk, {
             # No signals in 'getter' input are state setter signals
             'state_expr': '{{ $state }}',
@@ -92,7 +92,7 @@ class TestRelay(NIOBlockTestCase):
         self.assert_num_signals_notified(2, blk, 'false')
 
     def test_setter_input(self):
-        blk = Relay()
+        blk = Switch()
         self.configure_block(blk, {
             # No signals in 'getter' input are state setter signals
             'state_expr': '{{ $state }}',

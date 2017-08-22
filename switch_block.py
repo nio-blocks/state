@@ -7,7 +7,7 @@ from .state_base import StateBase
 @input('getter')
 @output('false')
 @output('true')
-class Relay(StateBase):
+class Switch(StateBase):
 
     """ Passthrough *getter* signals if the state is True.
 
