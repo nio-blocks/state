@@ -1,17 +1,22 @@
 {
+  "nio/AppendState": {
+    "language": "Python",
+    "url": "git://github.com//nio-blocks/state_change.git",
+    "version": "0.1.0"
+  },
   "nio/MergeState": {
     "language": "Python",
-    "version": "0.1.0",
-    "url": "git://github.com/nio-blocks/state_change.git"
+    "url": "git://github.com//nio-blocks/state_change.git",
+    "version": "0.1.0"
   },
   "nio/Relay": {
     "language": "Python",
-    "version": "0.1.0",
-    "url": "git://github.com/nio-blocks/state_change.git"
+    "url": "git://github.com//nio-blocks/state_change.git",
+    "version": "0.1.0"
   },
   "nio/StateChange": {
     "language": "Python",
-    "version": "0.1.0",
-    "url": "git://github.com/nio-blocks/state_change.git"
+    "url": "git://github.com//nio-blocks/state_change.git",
+    "version": "0.1.0"
   }
 }

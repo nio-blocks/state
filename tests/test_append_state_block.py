@@ -3,7 +3,7 @@ from nio.block.terminals import DEFAULT_TERMINAL
 from nio.signal.base import Signal
 from nio.testing.block_test_case import NIOBlockTestCase
 from .test_state_base import StateSignal
-from ..merge_state_block_deprecated import MergeState
+from ..append_state_block import AppendState
 
 
 class OtherSignal(Signal):
@@ -13,10 +13,10 @@ class OtherSignal(Signal):
         self.other = state
 
 
-class TestMergeState(NIOBlockTestCase):
+class TestAppendState(NIOBlockTestCase):
 
-    def test_merge_state(self):
-        blk = MergeState()
+    def test_append_state(self):
+        blk = AppendState()
         self.configure_block(blk, {
             'initial_state': '{{False}}',
             "state_expr": "{{$state}}",
@@ -53,7 +53,7 @@ class TestMergeState(NIOBlockTestCase):
         blk.stop()
 
     def test_getter_input(self):
-        blk = MergeState()
+        blk = AppendState()
         self.configure_block(blk, {
             # No signals in 'getter' input are state setter signals
             'state_expr': '{{ $state }}',
@@ -75,7 +75,7 @@ class TestMergeState(NIOBlockTestCase):
         self.assert_num_signals_notified(2, blk)
 
     def test_setter_input(self):
-        blk = MergeState()
+        blk = AppendState()
         self.configure_block(blk, {
             # No signals in default input are state setter signals
             'initial_state': '{{ False }}',

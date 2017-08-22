@@ -5,7 +5,7 @@ from nio.properties import StringProperty, VersionProperty
 
 @input('setter')
 @input('getter')
-class MergeState(StateBase):
+class AppendState(StateBase):
 
     """ Merge the *setter* state into *getter* signals.
 
