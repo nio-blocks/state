@@ -14,7 +14,7 @@ class AppendState(StateBase):
     """
 
     state_name = StringProperty(default='state', title="State Name")
-    version = VersionProperty('0.1.0')
+    version = VersionProperty("0.1.0")
 
     def _process_group(self, signals, group, input_id, signals_to_notify):
         if input_id == 'setter':
