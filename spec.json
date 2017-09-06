@@ -2,6 +2,9 @@
   "nio/AppendState": {
     "version": "0.1.0",
     "description": "Maintains a state and when state changes, a signal is notified that contains the `state` and `prev_state`.",
+    "categories": [
+      "Signal Modifier"
+    ],
     "properties": {
       "backup_interval": {
         "title": "Backup Interval",
@@ -75,6 +78,9 @@
   "nio/MergeState": {
     "version": "0.1.0",
     "description": "DEPRECATED, USE AppendState INSTEAD - Maintains a **state** and merges that state (with name `state_name`) with signals that are input through the getter input.",
+    "categories": [
+      "Signal Modifier"
+    ],
     "properties": {
       "backup_interval": {
         "title": "Backup Interval",
@@ -148,6 +154,9 @@
   "nio/Relay": {
     "version": "0.1.0",
     "description": "DEPRECATED, USE Switch INSTEAD - getter signals pass through to the *true* output if the last *setter* signal set the state to `True`. Else, the signals to getter pass through to the false output.",
+    "categories": [
+      "Signal Flow"
+    ],
     "properties": {
       "backup_interval": {
         "title": "Backup Interval",
@@ -218,6 +227,9 @@
   "nio/StateChange": {
     "version": "0.1.0",
     "description": "Maintains a state and when state changes, a signal is notified that contains the `state` and `prev_state`.",
+    "categories": [
+      "Signal Flow"
+    ],
     "properties": {
       "backup_interval": {
         "title": "Backup Interval",
@@ -294,6 +306,9 @@
   "nio/Switch": {
     "version": "0.1.0",
     "description": "getter signals pass through to the *true* output if the last *setter* signal set the state to `True`. Else, the signals to getter pass through to the false output.",
+    "categories": [
+      "Signal Flow"
+    ],
     "properties": {
       "backup_interval": {
         "title": "Backup Interval",
