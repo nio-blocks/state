@@ -33,7 +33,7 @@
         "default": true
       },
       "state_expr": {
-        "title": "State ",
+        "title": "State",
         "type": "Type",
         "description": "Property that evaluates to state. If the expression cannot be evaluated, the state will not change.",
         "default": "{{ $state }}"
@@ -115,7 +115,7 @@
         "default": true
       },
       "state_expr": {
-        "title": "State ",
+        "title": "State",
         "type": "Type",
         "description": "Property that evaluates to state. If the expression cannot be evaluated, the state will not change.",
         "default": "{{ $state }}"
@@ -188,7 +188,7 @@
         "default": true
       },
       "state_expr": {
-        "title": "State ",
+        "title": "State",
         "type": "Type",
         "description": "Property that evaluates to state. If the expression cannot be evaluated, the state will not change.",
         "default": "{{ $state }}"
