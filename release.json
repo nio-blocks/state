@@ -2,7 +2,7 @@
   "nio/AppendState": {
     "language": "Python",
     "url": "git://github.com/nio-blocks/state.git",
-    "version": "0.1.0"
+    "version": "0.1.1"
   },
   "nio/StateChange": {
     "language": "Python",
