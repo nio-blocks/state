@@ -76,7 +76,7 @@
     }
   },
   "nio/StateChange": {
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Maintains a state and when state changes, a signal is notified that contains the `state` and `prev_state`.",
     "categories": [
       "Signal Flow"
