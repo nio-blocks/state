@@ -15,7 +15,7 @@ class Switch(StateBase):
     signal set the state to True. Else, the signals to *getter* pass through
     to the *false* output.
     """
-    version = VersionProperty("0.1.0")
+    version = VersionProperty("0.1.1")
 
     def _process_group(self, signals, group, input_id, signals_to_notify):
         if input_id == 'setter':
