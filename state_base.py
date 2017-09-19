@@ -99,13 +99,7 @@ class StateBase(Persistence, GroupBy, Block):
         """
         with self._state_locks[group]:
             prev_state = self.get_state(group)
-            try:
-                new_state = self.state_expr(signal)
-            except:
-                # expression failed so don't set a state.
-                self.logger.exception(
-                    "State Change failed for group {}".format(group))
-                return
+            new_state = self.state_expr(signal)
 
             if new_state != prev_state:
                 # notify signal if there was a prev_state and
