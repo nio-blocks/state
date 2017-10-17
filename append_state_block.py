@@ -3,8 +3,8 @@ from nio.block.terminals import input
 from nio.properties import StringProperty, VersionProperty
 
 
-@input('setter')
-@input('getter')
+@input('setter', label='State')
+@input('getter', label='Stream')
 class AppendState(StateBase):
 
     """ Merge the *setter* state into *getter* signals.
