@@ -60,22 +60,6 @@ class TestStateBase(NIOBlockTestCase):
         self.assertEqual(1, process_out[0])  # previous state
         self.assertEqual(5, process_out[1])  # new state
 
-    def test_bad_expr(self):
-        """ Tests that the block won't save a state it can't evaluate """
-        blk = StateBase()
-        self.configure_block(blk, {
-            'state_expr': '{{$state + 1}}',
-            'initial_state': '{{None}}',
-            'group_by': '{{$group}}'
-        })
-        # Make sure we have the initial state,
-        # then send a signal that won't evaluate properly
-        # make sure that did NOT set the state and we still
-        # retained the original state
-        self.assertIsNone(blk.get_state('A'))
-        blk._process_state(StateSignal('hello'), 'A')
-        self.assertIsNone(blk.get_state('A'))
-
     def test_process_signals(self):
         """ Test that process signals properly calls process_group """
         blk = StateBase()
