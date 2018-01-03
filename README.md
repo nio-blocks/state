@@ -1,43 +1,43 @@
 AppendState
 ===========
-Maintains a state and when state changes, a signal is notified that contains the `state` and `prev_state`.
+The AppendState block adds a 'state' attribute to the `getter` input signal.  The block appends an attribute from `setter` signal to the `getter` input signal, and will the output signal will also include a `prev_state` attribute of the block's previous state. The state's attribute name can be configured with the `State Name` property, and the value is assigned based on the expression in the `State` property.
 
 Properties
 ----------
 - **backup_interval**: Interval at which state is saved to disk.
-- **group_by**: What to group the signals by. A different state will be maintained for each group
+- **group_by**: Signal attribute to define groupings of incoming signals.  Each group will have its own state.
 - **initial_state**: The state when none has been set by an incoming signal. If the `initial_state` is a python expression, it is evaluated at configuration. For example, if the `initial_state` is configured as `{{ datetime.datetime.utctime() }}`, the value of `initial_state` will the be time at configuration.
-- **load_from_persistence**: Upon restart, block will load the previous state and resume operation as if restart did not happen.
-- **state_expr**: Property that evaluates to state. If the expression cannot be evaluated, the state will not change.
-- **state_name**: String property that is the name of the appended state
+- **load_from_persistence**: If true, the block’s state will be saved at a block stoppage and reloaded upon restart.
+- **state_expr**: Property used to assign a state. If the expression cannot be evaluated, the state will not change.
+- **state_name**: String property that is the name of the signal attribute for the appended state.
 
 Inputs
 ------
-- **getter**: Any list of signals. Signals that get assigned a state and/or pass through the block.
+- **getter**: Any list of signals. These signals will get assigned a state and/or pass through the block.
 - **setter**: Signals passed to this input set the state of the block. Each signal is evaluated against `state_expr` to determine the new state of the block for the signal's group.
 
 Outputs
 -------
-- **default**: Non state setting signals are passed through with state set to the attribute `state_name`.
+- **default**: The original signal along with the configured `state_name` attribute and the `prev_state` attribute.
 
 Commands
 --------
-- **current_state**: Get the current state of the block is applying to the signals
+- **current_state**: Get the current state of the block is applying to the signals.
 - **groups**: Display the current groupings of signals.
 
 StateChange
 ===========
-Maintains a state and when state changes, a signal is notified that contains the `state` and `prev_state`.
+The StateChange block maintains a state based on an attribute of the input signal.  When the state changes, a signal is emitted that contains the `state` and `prev_state`.
 
 Properties
 ----------
 - **backup_interval**: Interval at which state is saved to disk.
-- **exclude**: Select whether you want to exclude other signals. If checked, the only output will be `state` and `prev_state`. If not checked, `state` and `prev_state` will be appended onto the incoming signal.
-- **group_by**: What to group the signals by. A different state will be maintained for each group
+- **exclude**: If checked (true), the original signal sent into the block will be excluded from the signal sent out of the block. If unchecked (false), the output signal will include the original signal sent into the block.
+- **group_by**: Signal attribute to define groupings of incoming signals.  Each group will have its own state.
 - **initial_state**: The state when none has been set by an incoming signal. If the `initial_state` is a python expression, it is evaluated at configuration. For example, if the `initial_state` is configured as `{{ datetime.datetime.utctime() }}`, the value of `initial_state` will the be time at configuration.
-- **load_from_persistence**: Upon restart, block will load the previous state and resume operation as if restart did not happen.
-- **state_expr**: Property that evaluates to state. If the expression cannot be evaluated, the state will not change.
-- **state_name**: String property that is the name of the appended state
+- **load_from_persistence**: If true, the block’s state will be saved at a block stoppage and reloaded upon restart.
+- **state_expr**: Property used to assign a state and be monitored for a change in value. If the expression cannot be evaluated, the state will not change.
+- **state_name**: String property that is the name of the signal attribute for the appended state.
 
 Inputs
 ------
@@ -49,20 +49,20 @@ Outputs
 
 Commands
 --------
-- **current_state**: Get the current state of the block is applying to the signals
+- **current_state**: Get the current state of the block is applying to the signals.
 - **groups**: Display the current groupings of signals.
 
 Switch
 ======
-getter signals pass through to the *true* output if the last *setter* signal set the state to `True`. Else, the signals to getter pass through to the false output.
+The Switch block emits signals from either the True or False output terminal based on what the configured `State` expression evaluates to.  The `getter` input signal is what gets passed along, and the `setter` input signal is used to determine the state.
 
 Properties
 ----------
 - **backup_interval**: Interval at which state is saved to disk.
-- **group_by**: What to group the signals by. A different state will be maintained for each group
+- **group_by**: Signal attribute to define groupings of incoming signals.  Each group will have its own state.
 - **initial_state**: The state when none has been set by an incoming signal. If the `initial_state` is a python expression, it is evaluated at configuration. For example, if the `initial_state` is configured as `{{ datetime.datetime.utctime() }}`, the value of `initial_state` will the be time at configuration.
-- **load_from_persistence**: Upon restart, block will load the previous state and resume operation as if restart did not happen.
-- **state_expr**: Property that evaluates to state. If the expression cannot be evaluated, the state will not change.
+- **load_from_persistence**: If true, the block’s state will be saved at a block stoppage and reloaded upon restart.
+- **state_expr**: Property that evaluates to a true or false state. If the expression cannot be evaluated, the state will not change.
 
 Inputs
 ------
@@ -72,10 +72,10 @@ Inputs
 Outputs
 -------
 - **false**: getter signals pass through to the false output by default until state is changed to `True`.
-- **true**: getter signals pass through to the true output if the last setter signal set the state to `True`
+- **true**: getter signals pass through to the true output if the last setter signal set the state to `True`.
 
 Commands
 --------
-- **current_state**: Get the current state of the block is applying to the signals
+- **current_state**: Get the current state of the block is applying to the signals.
 - **groups**: Display the current groupings of signals.
 
