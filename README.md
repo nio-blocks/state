@@ -4,10 +4,10 @@ The AppendState block adds a 'state' attribute to the `getter` input signal.  Th
 
 Properties
 ----------
-- **backup_interval**: Interval at which state is saved to disk.
-- **group_by**: Signal attribute to define groupings of incoming signals.  Each group will have its own state.
+- **backup_interval**: An interval of time that specifies how often persisted data is saved.
+- **group_by**: The signal attribute on the incoming signal whose values will be used to define groups on the outgoing signal.
 - **initial_state**: The state when none has been set by an incoming signal. If the `initial_state` is a python expression, it is evaluated at configuration. For example, if the `initial_state` is configured as `{{ datetime.datetime.utctime() }}`, the value of `initial_state` will the be time at configuration.
-- **load_from_persistence**: If true, the block’s state will be saved at a block stoppage and reloaded upon restart.
+- **load_from_persistence**: If `True`, the block’s state will be saved when the block is stopped, and reloaded once the block is restarted.
 - **state_expr**: Property used to assign a state. If the expression cannot be evaluated, the state will not change.
 - **state_name**: String property that is the name of the signal attribute for the appended state.
 
@@ -31,11 +31,11 @@ The StateChange block maintains a state based on an attribute of the input signa
 
 Properties
 ----------
-- **backup_interval**: Interval at which state is saved to disk.
+- **backup_interval**: An interval of time that specifies how often persisted data is saved.
 - **exclude**: If checked (true), the original signal sent into the block will be excluded from the signal sent out of the block. If unchecked (false), the output signal will include the original signal sent into the block.
-- **group_by**: Signal attribute to define groupings of incoming signals.  Each group will have its own state.
+- **group_by**: The signal attribute on the incoming signal whose values will be used to define groups on the outgoing signal.
 - **initial_state**: The state when none has been set by an incoming signal. If the `initial_state` is a python expression, it is evaluated at configuration. For example, if the `initial_state` is configured as `{{ datetime.datetime.utctime() }}`, the value of `initial_state` will the be time at configuration.
-- **load_from_persistence**: If true, the block’s state will be saved at a block stoppage and reloaded upon restart.
+- **load_from_persistence**: If `True`, the block’s state will be saved when the block is stopped, and reloaded once the block is restarted.
 - **state_expr**: Property used to assign a state and be monitored for a change in value. If the expression cannot be evaluated, the state will not change.
 - **state_name**: String property that is the name of the signal attribute for the appended state.
 
@@ -54,14 +54,14 @@ Commands
 
 Switch
 ======
-The Switch block emits signals from either the True or False output terminal based on what the configured `State` expression evaluates to.  The `getter` input signal is what gets passed along, and the `setter` input signal is used to determine the state.
+The Switch block emits signals from either the True or False output terminal based on what the `State` expression evaluates to.  The `getter` input signal is what gets passed along, and the `setter` input signal is used to determine the state.
 
 Properties
 ----------
-- **backup_interval**: Interval at which state is saved to disk.
-- **group_by**: Signal attribute to define groupings of incoming signals.  Each group will have its own state.
+- **backup_interval**: An interval of time that specifies how often persisted data is saved.
+- **group_by**: The signal attribute on the incoming signal whose values will be used to define groups on the outgoing signal.
 - **initial_state**: The state when none has been set by an incoming signal. If the `initial_state` is a python expression, it is evaluated at configuration. For example, if the `initial_state` is configured as `{{ datetime.datetime.utctime() }}`, the value of `initial_state` will the be time at configuration.
-- **load_from_persistence**: If true, the block’s state will be saved at a block stoppage and reloaded upon restart.
+- **load_from_persistence**: If `True`, the block’s state will be saved when the block is stopped, and reloaded once the block is restarted.
 - **state_expr**: Property that evaluates to a true or false state. If the expression cannot be evaluated, the state will not change.
 
 Inputs

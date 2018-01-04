@@ -9,7 +9,7 @@
       "backup_interval": {
         "title": "Backup Interval",
         "type": "TimeDeltaType",
-        "description": "Interval at which state is saved to disk.",
+        "description": "An interval of time that specifies how often persisted data is saved.",
         "default": {
           "seconds": 3600
         }
@@ -17,7 +17,7 @@
       "group_by": {
         "title": "Group By",
         "type": "Type",
-        "description": "Signal attribute to define groupings of incoming signals.  Each group will have its own state.",
+        "description": "The signal attribute on the incoming signal whose values will be used to define groups on the outgoing signal.",
         "default": null
       },
       "initial_state": {
@@ -29,7 +29,7 @@
       "load_from_persistence": {
         "title": "Load from Persistence?",
         "type": "BoolType",
-        "description": "If true, the block’s state will be saved at a block stoppage and reloaded upon restart.",
+        "description": "If `True`, the block’s state will be saved when the block is stopped, and reloaded once the block is restarted.",
         "default": true
       },
       "state_expr": {
@@ -85,7 +85,7 @@
       "backup_interval": {
         "title": "Backup Interval",
         "type": "TimeDeltaType",
-        "description": "Interval at which state is saved to disk.",
+        "description": "An interval of time that specifies how often persisted data is saved.",
         "default": {
           "seconds": 3600
         }
@@ -99,7 +99,7 @@
       "group_by": {
         "title": "Group By",
         "type": "Type",
-        "description": "Signal attribute to define groupings of incoming signals.  Each group will have its own state.",
+        "description": "The signal attribute on the incoming signal whose values will be used to define groups on the outgoing signal.",
         "default": null
       },
       "initial_state": {
@@ -111,7 +111,7 @@
       "load_from_persistence": {
         "title": "Load from Persistence?",
         "type": "BoolType",
-        "description": "If true, the block’s state will be saved at a block stoppage and reloaded upon restart.",
+        "description": "If `True`, the block’s state will be saved when the block is stopped, and reloaded once the block is restarted.",
         "default": true
       },
       "state_expr": {
@@ -156,7 +156,7 @@
   },
   "nio/Switch": {
     "version": "0.1.1",
-    "description": "The Switch block emits signals from either the True or False output terminal based on what the configured `State` expression evaluates to.  The `getter` input signal is what gets passed along, and the `setter` input signal is used to determine the state.",
+    "description": "The Switch block emits signals from either the True or False output terminal based on what the `State` expression evaluates to.  The `getter` input signal is what gets passed along, and the `setter` input signal is used to determine the state.",
     "categories": [
       "Signal Flow"
     ],
@@ -164,7 +164,7 @@
       "backup_interval": {
         "title": "Backup Interval",
         "type": "TimeDeltaType",
-        "description": "Interval at which state is saved to disk.",
+        "description": "An interval of time that specifies how often persisted data is saved.",
         "default": {
           "seconds": 3600
         }
@@ -172,7 +172,7 @@
       "group_by": {
         "title": "Group By",
         "type": "Type",
-        "description": "Signal attribute to define groupings of incoming signals.  Each group will have its own state.",
+        "description": "The signal attribute on the incoming signal whose values will be used to define groups on the outgoing signal.",
         "default": null
       },
       "initial_state": {
@@ -184,7 +184,7 @@
       "load_from_persistence": {
         "title": "Load from Persistence?",
         "type": "BoolType",
-        "description": "If true, the block’s state will be saved at a block stoppage and reloaded upon restart.",
+        "description": "If `True`, the block’s state will be saved when the block is stopped, and reloaded once the block is restarted.",
         "default": true
       },
       "state_expr": {
