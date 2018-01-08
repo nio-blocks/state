@@ -155,7 +155,7 @@
     }
   },
   "nio/Switch": {
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "getter signals pass through to the *true* output if the last *setter* signal set the state to `True`. Else, the signals to getter pass through to the false output.",
     "categories": [
       "Signal Flow"
