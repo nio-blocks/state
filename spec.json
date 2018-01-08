@@ -1,6 +1,6 @@
 {
   "nio/AppendState": {
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Maintains a state and when state changes, a signal is notified that contains the `state` and `prev_state`.",
     "categories": [
       "Signal Modifier"
