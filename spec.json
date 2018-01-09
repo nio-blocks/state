@@ -76,7 +76,7 @@
     }
   },
   "nio/StateChange": {
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "The StateChange block maintains a state based on an attribute of the input signal.  When the state changes, a signal is emitted that contains the `state` and `prev_state`.",
     "categories": [
       "Signal Flow"

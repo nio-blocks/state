@@ -7,7 +7,7 @@
   "nio/StateChange": {
     "language": "Python",
     "url": "git://github.com/nio-blocks/state.git",
-    "version": "0.1.2"
+    "version": "0.1.3"
   },
   "nio/Switch": {
     "language": "Python",
