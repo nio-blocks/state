@@ -17,7 +17,7 @@
       "group_by": {
         "title": "Group By",
         "type": "Type",
-        "description": "What to group the signals by. A different state will be maintained for each group",
+        "description": "What to group the signals by. A different state will be maintained for each group.",
         "default": null
       },
       "initial_state": {
@@ -33,7 +33,7 @@
         "default": true
       },
       "state_expr": {
-        "title": "State",
+        "title": "State ",
         "type": "Type",
         "description": "Property that evaluates to state. If the expression cannot be evaluated, the state will not change.",
         "default": "{{ $state }}"
@@ -46,11 +46,11 @@
       }
     },
     "inputs": {
-      "getter": {
+      "State": {
         "description": "Any list of signals. Signals that get assigned a state and/or pass through the block."
       },
-      "setter": {
-        "description": "Signals passed to this input set the state of the block. Each signal is evaluated against `state_expr` to determine the new state of the block for the signal's group."
+      "Stream": {
+        "description": "Signals passed to this input set the state of the block. Each signal is evaluated against state_expr to determine the new state of the block for the signal's group."
       }
     },
     "outputs": {
@@ -62,12 +62,12 @@
       "current_state": {
         "params": {
           "group": {
-            "allow_none": true,
             "title": "group",
-            "default": null
+            "default": null,
+            "allow_none": true
           }
         },
-        "description": "Get the current state of the block is applying to the signals"
+        "description": "Get the current state of the block is applying to the signals."
       },
       "groups": {
         "params": {},
@@ -76,7 +76,7 @@
     }
   },
   "nio/StateChange": {
-    "version": "0.1.1",
+    "version": "0.1.0",
     "description": "Maintains a state and when state changes, a signal is notified that contains the `state` and `prev_state`.",
     "categories": [
       "Signal Flow"
@@ -115,7 +115,7 @@
         "default": true
       },
       "state_expr": {
-        "title": "State",
+        "title": "State ",
         "type": "Type",
         "description": "Property that evaluates to state. If the expression cannot be evaluated, the state will not change.",
         "default": "{{ $state }}"
@@ -123,7 +123,7 @@
       "state_name": {
         "title": "State Name",
         "type": "StringType",
-        "description": "String property that is the name of the appended state",
+        "description": "String property that is the name of the appended state.",
         "default": "state"
       }
     },
@@ -141,12 +141,12 @@
       "current_state": {
         "params": {
           "group": {
-            "allow_none": true,
             "title": "group",
-            "default": null
+            "default": null,
+            "allow_none": true
           }
         },
-        "description": "Get the current state of the block is applying to the signals"
+        "description": "Get the current state of the block is applying to the signals."
       },
       "groups": {
         "params": {},
@@ -172,7 +172,7 @@
       "group_by": {
         "title": "Group By",
         "type": "Type",
-        "description": "What to group the signals by. A different state will be maintained for each group",
+        "description": "What to group the signals by. A different state will be maintained for each group.",
         "default": null
       },
       "initial_state": {
@@ -188,7 +188,7 @@
         "default": true
       },
       "state_expr": {
-        "title": "State",
+        "title": "State ",
         "type": "Type",
         "description": "Property that evaluates to state. If the expression cannot be evaluated, the state will not change.",
         "default": "{{ $state }}"
@@ -214,12 +214,12 @@
       "current_state": {
         "params": {
           "group": {
-            "allow_none": true,
             "title": "group",
-            "default": null
+            "default": null,
+            "allow_none": true
           }
         },
-        "description": "Get the current state of the block is applying to the signals"
+        "description": "Get the current state of the block is applying to the signals."
       },
       "groups": {
         "params": {},
