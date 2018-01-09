@@ -1,7 +1,7 @@
 {
   "nio/AppendState": {
     "version": "0.1.2",
-    "description": "Maintains a state and when state changes, a signal is notified that contains the `state` and `prev_state`.",
+    "description": "The AppendState block adds a 'state' attribute to the `getter` input signal.  The block appends an attribute from `setter` signal to the `getter` input signal, and will the output signal will also include a `prev_state` attribute of the block's previous state. The state's attribute name can be configured with the `State Name` property, and the value is assigned based on the expression in the `State` property.",
     "categories": [
       "Signal Modifier"
     ],
@@ -9,7 +9,7 @@
       "backup_interval": {
         "title": "Backup Interval",
         "type": "TimeDeltaType",
-        "description": "Interval at which state is saved to disk.",
+        "description": "An interval of time that specifies how often persisted data is saved.",
         "default": {
           "seconds": 3600
         }
@@ -17,7 +17,7 @@
       "group_by": {
         "title": "Group By",
         "type": "Type",
-        "description": "What to group the signals by. A different state will be maintained for each group",
+        "description": "The signal attribute on the incoming signal whose values will be used to define groups on the outgoing signal.",
         "default": null
       },
       "initial_state": {
@@ -29,25 +29,25 @@
       "load_from_persistence": {
         "title": "Load from Persistence?",
         "type": "BoolType",
-        "description": "Upon restart, block will load the previous state and resume operation as if restart did not happen.",
+        "description": "If `True`, the block’s state will be saved when the block is stopped, and reloaded once the block is restarted.",
         "default": true
       },
       "state_expr": {
         "title": "State",
         "type": "Type",
-        "description": "Property that evaluates to state. If the expression cannot be evaluated, the state will not change.",
+        "description": "Property used to assign a state. If the expression cannot be evaluated, the state will not change.",
         "default": "{{ $state }}"
       },
       "state_name": {
         "title": "State Name",
         "type": "StringType",
-        "description": "String property that is the name of the appended state",
+        "description": "String property that is the name of the signal attribute for the appended state.",
         "default": "state"
       }
     },
     "inputs": {
       "getter": {
-        "description": "Any list of signals. Signals that get assigned a state and/or pass through the block."
+        "description": "Any list of signals. These signals will get assigned a state and/or pass through the block."
       },
       "setter": {
         "description": "Signals passed to this input set the state of the block. Each signal is evaluated against `state_expr` to determine the new state of the block for the signal's group."
@@ -55,7 +55,7 @@
     },
     "outputs": {
       "default": {
-        "description": "Non state setting signals are passed through with state set to the attribute `state_name`."
+        "description": "The original signal along with the configured `state_name` attribute and the `prev_state` attribute."
       }
     },
     "commands": {
@@ -67,7 +67,7 @@
             "default": null
           }
         },
-        "description": "Get the current state of the block is applying to the signals"
+        "description": "Get the current state of the block is applying to the signals."
       },
       "groups": {
         "params": {},
@@ -77,7 +77,7 @@
   },
   "nio/StateChange": {
     "version": "0.1.2",
-    "description": "Maintains a state and when state changes, a signal is notified that contains the `state` and `prev_state`.",
+    "description": "The StateChange block maintains a state based on an attribute of the input signal.  When the state changes, a signal is emitted that contains the `state` and `prev_state`.",
     "categories": [
       "Signal Flow"
     ],
@@ -85,7 +85,7 @@
       "backup_interval": {
         "title": "Backup Interval",
         "type": "TimeDeltaType",
-        "description": "Interval at which state is saved to disk.",
+        "description": "An interval of time that specifies how often persisted data is saved.",
         "default": {
           "seconds": 3600
         }
@@ -93,13 +93,13 @@
       "exclude": {
         "title": "Exclude Existing Fields",
         "type": "BoolType",
-        "description": "Select whether you want to exclude other signals. If checked, the only output will be `state` and `prev_state`. If not checked, `state` and `prev_state` will be appended onto the incoming signal.",
+        "description": "If checked (true), the original signal sent into the block will be excluded from the signal sent out of the block. If unchecked (false), the output signal will include the original signal sent into the block.",
         "default": true
       },
       "group_by": {
         "title": "Group By",
         "type": "Type",
-        "description": "What to group the signals by. A different state will be maintained for each group",
+        "description": "The signal attribute on the incoming signal whose values will be used to define groups on the outgoing signal.",
         "default": null
       },
       "initial_state": {
@@ -111,19 +111,19 @@
       "load_from_persistence": {
         "title": "Load from Persistence?",
         "type": "BoolType",
-        "description": "Upon restart, block will load the previous state and resume operation as if restart did not happen.",
+        "description": "If `True`, the block’s state will be saved when the block is stopped, and reloaded once the block is restarted.",
         "default": true
       },
       "state_expr": {
         "title": "State",
         "type": "Type",
-        "description": "Property that evaluates to state. If the expression cannot be evaluated, the state will not change.",
+        "description": "Property used to assign a state and be monitored for a change in value. If the expression cannot be evaluated, the state will not change.",
         "default": "{{ $state }}"
       },
       "state_name": {
         "title": "State Name",
         "type": "StringType",
-        "description": "String property that is the name of the appended state",
+        "description": "String property that is the name of the signal attribute for the appended state.",
         "default": "state"
       }
     },
@@ -146,7 +146,7 @@
             "default": null
           }
         },
-        "description": "Get the current state of the block is applying to the signals"
+        "description": "Get the current state of the block is applying to the signals."
       },
       "groups": {
         "params": {},
@@ -156,7 +156,7 @@
   },
   "nio/Switch": {
     "version": "0.1.2",
-    "description": "getter signals pass through to the *true* output if the last *setter* signal set the state to `True`. Else, the signals to getter pass through to the false output.",
+    "description": "The Switch block emits signals from either the True or False output terminal based on what the `State` expression evaluates to.  The `getter` input signal is what gets passed along, and the `setter` input signal is used to determine the state.",
     "categories": [
       "Signal Flow"
     ],
@@ -164,7 +164,7 @@
       "backup_interval": {
         "title": "Backup Interval",
         "type": "TimeDeltaType",
-        "description": "Interval at which state is saved to disk.",
+        "description": "An interval of time that specifies how often persisted data is saved.",
         "default": {
           "seconds": 3600
         }
@@ -172,7 +172,7 @@
       "group_by": {
         "title": "Group By",
         "type": "Type",
-        "description": "What to group the signals by. A different state will be maintained for each group",
+        "description": "The signal attribute on the incoming signal whose values will be used to define groups on the outgoing signal.",
         "default": null
       },
       "initial_state": {
@@ -184,13 +184,13 @@
       "load_from_persistence": {
         "title": "Load from Persistence?",
         "type": "BoolType",
-        "description": "Upon restart, block will load the previous state and resume operation as if restart did not happen.",
+        "description": "If `True`, the block’s state will be saved when the block is stopped, and reloaded once the block is restarted.",
         "default": true
       },
       "state_expr": {
         "title": "State",
         "type": "Type",
-        "description": "Property that evaluates to state. If the expression cannot be evaluated, the state will not change.",
+        "description": "Property that evaluates to a true or false state. If the expression cannot be evaluated, the state will not change.",
         "default": "{{ $state }}"
       }
     },
@@ -207,7 +207,7 @@
         "description": "getter signals pass through to the false output by default until state is changed to `True`."
       },
       "true": {
-        "description": "getter signals pass through to the true output if the last setter signal set the state to `True`"
+        "description": "getter signals pass through to the true output if the last setter signal set the state to `True`."
       }
     },
     "commands": {
@@ -219,7 +219,7 @@
             "default": null
           }
         },
-        "description": "Get the current state of the block is applying to the signals"
+        "description": "Get the current state of the block is applying to the signals."
       },
       "groups": {
         "params": {},
