@@ -1,6 +1,6 @@
 {
   "nio/AppendState": {
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "The AppendState block adds a 'state' attribute to the `getter` input signal.  The block appends an attribute from `setter` signal to the `getter` input signal, and will the output signal will also include a `prev_state` attribute of the block's previous state. The state's attribute name can be configured with the `State Name` property, and the value is assigned based on the expression in the `State` property.",
     "categories": [
       "Signal Modifier"
@@ -76,7 +76,7 @@
     }
   },
   "nio/StateChange": {
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "The StateChange block maintains a state based on an attribute of the input signal.  When the state changes, a signal is emitted that contains the `state` and `prev_state`.",
     "categories": [
       "Signal Flow"
@@ -155,7 +155,7 @@
     }
   },
   "nio/Switch": {
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "The Switch block emits signals from either the True or False output terminal based on what the `State` expression evaluates to.  The `getter` input signal is what gets passed along, and the `setter` input signal is used to determine the state.",
     "categories": [
       "Signal Flow"
