@@ -21,9 +21,9 @@ class StateBase(Persistence, GroupBy, Block):
     """ A base block mixin for keeping track of state """
 
     state_expr = Property(
-        title='State ', default='{{ $state }}', allow_none=True)
+        title='State ', default='{{ $state }}', allow_none=True, order=0)
     initial_state = Property(
-        title='Initial State', default='{{ None }}', allow_none=True)
+        title='Initial State', default='{{ None }}', allow_none=True, order=1)
     version = VersionProperty('0.1.0')
 
     def __init__(self):

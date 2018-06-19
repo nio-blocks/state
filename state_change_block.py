@@ -16,8 +16,9 @@ class StateChange(StateBase):
     """
 
     state_name = StringProperty(
-        default='state', title="State Name", visible=False)
-    exclude = BoolProperty(default=True, title="Exclude Existing Fields")
+        default='state', title="State Name", advanced=True)
+    exclude = BoolProperty(default=True, title="Exclude Existing Fields",
+                    order=2)
 
     def _process_group(self, signals, group, input_id, signals_to_notify):
         """Process the signals for a group."""
