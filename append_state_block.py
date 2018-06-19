@@ -13,7 +13,7 @@ class AppendState(StateBase):
     signals that are input through the *getter* input.
     """
 
-    state_name = StringProperty(default='state', title="State Name")
+    state_name = StringProperty(default='state', title="State Name", order=2)
     version = VersionProperty("0.1.3")
 
     def _process_group(self, signals, group, input_id, signals_to_notify):

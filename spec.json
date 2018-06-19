@@ -123,7 +123,7 @@
       "state_name": {
         "title": "State Name",
         "type": "StringType",
-        "description": "String property that is the name of the signal attribute for the appended state.",
+        "description": "String property that is the name of the signal attribute for the state.",
         "default": "state"
       }
     },
