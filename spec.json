@@ -1,6 +1,6 @@
 {
   "nio/AppendState": {
-    "version": "0.1.3",
+    "version": "0.2.0",
     "description": "The AppendState block adds a 'state' attribute to the `getter` input signal.  The block appends an attribute from `setter` signal to the `getter` input signal, and will the output signal will also include a `prev_state` attribute of the block's previous state. The state's attribute name can be configured with the `State Name` property, and the value is assigned based on the expression in the `State` property.",
     "categories": [
       "Signal Modifier"
