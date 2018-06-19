@@ -155,7 +155,7 @@
     }
   },
   "nio/Switch": {
-    "version": "0.1.3",
+    "version": "0.2.0",
     "description": "The Switch block emits signals from either the True or False output terminal based on what the `State` expression evaluates to.  The `getter` input signal is what gets passed along, and the `setter` input signal is used to determine the state.",
     "categories": [
       "Signal Flow"
