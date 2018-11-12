@@ -19,7 +19,7 @@ Examples
 States can be used to process a stream of data into discrete events, for example when a process value is out of spec:
 
 ```
-State: {{ $temp_C > 0 }},
+State: {{ $temp_C > 0 }}
 Exclude Existing Fields: False
 ```
 <table width=100%>
@@ -61,7 +61,6 @@ Exclude Existing Fields: False
 </pre>
 </td>
 <td>
-
 *none, the current state is unchanged because the result of `-1.0 > 0` is `False`*
 </td>
 </tr>
@@ -93,10 +92,10 @@ Exclude Existing Fields: False
 By setting the **Group By** property multiple similar streams can be processed by the same block. In addition, setting an **Initial State** can prevent a "change" of state when a new group is processed for the first time. In this example, each *freezer* is processed for the first time and its current **State** is compared to the defined **Initial State**, and a signal notified only if there is a new **State**. In that case the **Initial State** will be used for the value of `prev_state` in the outgoing signal:
 
 ```
-Group By: {{ $freezer }},
-State: {{ $temp_C > 0 }},
-Initial State: {{ False }},
-State Name: out_of_spec,
+Group By: {{ $freezer }}
+State: {{ $temp_C > 0 }}
+Initial State: {{ False }}
+State Name: out_of_spec
 Exclude Existing Fields: True
 ```
 <table width=100%>
@@ -118,7 +117,7 @@ Exclude Existing Fields: True
   },
   {
     "freezer": 3,
-    "temp_C": -2.5
+    "temp_C": -3.0
   }
 ]
 </pre>

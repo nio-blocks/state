@@ -19,7 +19,7 @@ Examples
 --------
 In this example, the last value from one stream is added to signals from another stream:
 ```
-State: {{ $numbers }},
+State: {{ $numbers }}
 ```
 <table width=100%>
 <tr valign="top">
@@ -150,8 +150,8 @@ State: {{ $numbers }},
 If, for example, we want to get a current temperature value from a freezer every time the door opens or closes, we can use **Group By** to match up streams from doors and temps:
 
 ```
-Group By: {{ $freezer }},
-State: {{ $temp_C }},
+Group By: {{ $freezer }}
+State: {{ $temp_C }}
 State Name: temp_C
 ```
 <table width=100%>
