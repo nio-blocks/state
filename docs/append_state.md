@@ -21,14 +21,14 @@ In this example, the last value from one stream is added to signals from another
 ```
 State: {{ $numbers }}
 ```
-<table width=100%>
-<tr valign="top">
-<th align="left">Incoming Signals, Getter</th>
-<th align="left">Incoming Signals, Setter</th>
-<th align="left">Outgoing Signals</th>
+<table>
+<tr>
+<th>Incoming Signals, Getter</th>
+<th>Incoming Signals, Setter</th>
+<th>Outgoing Signals</th>
 </tr>
 
-<tr valign="top">
+<tr>
 <td>
 
 *none*
@@ -48,7 +48,7 @@ State: {{ $numbers }}
 </td>
 </tr>
 
-<tr valign="top">
+<tr>
 <td>
 <pre>
 [
@@ -74,7 +74,7 @@ State: {{ $numbers }}
 </td>
 </tr>
 
-<tr valign="top">
+<tr>
 <td>
 <pre>
 [
@@ -100,7 +100,7 @@ State: {{ $numbers }}
 </td>
 </tr>
 
-<tr valign="top">
+<tr>
 <td>
 
 *none*
@@ -120,7 +120,7 @@ State: {{ $numbers }}
 </td>
 </tr>
 
-<tr valign="top">
+<tr>
 <td>
 <pre>
 [
@@ -154,14 +154,14 @@ Group By: {{ $freezer }}
 State: {{ $temp_C }}
 State Name: temp_C
 ```
-<table width=100%>
-<tr valign="top">
-<th align="left">Incoming Signals, Getter</th>
-<th align="left">Incoming Signals, Setter</th>
-<th align="left">Outgoing Signals</th>
+<table>
+<tr>
+<th>Incoming Signals, Getter</th>
+<th>Incoming Signals, Setter</th>
+<th>Outgoing Signals</th>
 </tr>
 
-<tr valign="top">
+<tr>
 <td>
 
 *none*
@@ -190,7 +190,7 @@ State Name: temp_C
 </td>
 </tr>
 
-<tr valign="top">
+<tr>
 <td>
 <pre>
 [

@@ -22,12 +22,12 @@ States can be used to process a stream of data into discrete events, for example
 State: {{ $temp_C > 0 }}
 Exclude Existing Fields: False
 ```
-<table width=100%>
-<tr valign="top">
-<th align="left">Incoming Signals</th>
-<th align="left">Outgoing Signals</th>
+<table>
+<tr>
+<th>Incoming Signals</th>
+<th>Outgoing Signals</th>
 </tr>
-<tr valign="top">
+<tr>
 <td>
 <pre>
 [
@@ -50,7 +50,7 @@ Exclude Existing Fields: False
 </pre>
 </td>
 </tr>
-<tr valign="top">
+<tr>
 <td>
 <pre>
 [
@@ -61,10 +61,10 @@ Exclude Existing Fields: False
 </pre>
 </td>
 <td>
-*none, the current state is unchanged because the result of `-1.0 > 0` is `False`*
+<em>none, the current state is unchanged because the result of -1.0 > 0 is False</em>
 </td>
 </tr>
-<tr valign="top">
+<tr>
 <td>
 <pre>
 [
@@ -98,12 +98,12 @@ Initial State: {{ False }}
 State Name: out_of_spec
 Exclude Existing Fields: True
 ```
-<table width=100%>
-<tr valign="top">
-<th align="left">Incoming Signals</th>
-<th align="left">Outgoing Signals</th>
+<table>
+<tr>
+<th>Incoming Signals</th>
+<th>Outgoing Signals</th>
 </tr>
-<tr valign="top">
+<tr>
 <td>
 <pre>
 [

@@ -19,15 +19,15 @@ In this example, the temperature value from a freezer is streamed while the door
 Group By: {{ $freezer }}
 State: {{ $door_open }}
 ```
-<table width=100%>
-<tr valign="top">
-<th align="left">Incoming Signals, Getter</th>
-<th align="left">Incoming Signals, Setter</th>
-<th align="left">Outgoing Signals, True</th>
-<th align="left">Outgoing Signals, False</th>
+<table>
+<tr>
+<th>Incoming Signals, Getter</th>
+<th>Incoming Signals, Setter</th>
+<th>Outgoing Signals, True</th>
+<th>Outgoing Signals, False</th>
 </tr>
 
-<tr valign="top">
+<tr>
 <td>
 
 *none*
@@ -60,7 +60,7 @@ State: {{ $door_open }}
 </td>
 </tr>
 
-<tr valign="top">
+<tr>
 <td>
 <pre>
 [
