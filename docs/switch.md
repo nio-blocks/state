@@ -1,6 +1,6 @@
 Switch
 ======
-The Switch block is useful for turning a stream on or off, or redirecting the flow of signals based on a current **State**, without modifying the incoming signals. This block has two inputs, the `setter` behaves like and is configured exactly like a [StateChange](state_change.md) block, and the `getter` is a stream of data that is to be controlled by the `setter`. The boolean value (`True` or `False`) of the `setter` **State** determines from which output the incoming `getter` signal will be emitted. See the [Truth Value Testing](https://docs.python.org/3/library/stdtypes.html#truth-value-testing) Python docs for more information on these evaluations.
+The Switch block is useful for turning a stream on or off, or redirecting the flow of signals based on a current **State**, without modifying the incoming signals. This block has two inputs, the `setter` behaves like and is configured exactly like a [StateChange](https://blocks.n.io/StateChange) block, and the `getter` is a stream of data that is to be controlled by the `setter`. The boolean value (`True` or `False`) of the `setter` **State** determines from which output the incoming `getter` signal will be emitted. See the [Truth Value Testing](https://docs.python.org/3/library/stdtypes.html#truth-value-testing) Python docs for more information on these evaluations.
 
 Properties
 ----------
@@ -19,18 +19,17 @@ In this example, the temperature value from a freezer is streamed while the door
 Group By: {{ $freezer }}
 State: {{ $door_open }}
 ```
-<table>
+<table width=100%>
 <tr>
 <th>Incoming Signals, Getter</th>
 <th>Incoming Signals, Setter</th>
 <th>Outgoing Signals, True</th>
 <th>Outgoing Signals, False</th>
 </tr>
-
 <tr>
 <td>
-
-*none*
+<br>
+<em>none</em>
 </td>
 <td>
 <pre>
@@ -51,15 +50,14 @@ State: {{ $door_open }}
 </pre>
 </td>
 <td>
-
-*none*
+<br>
+<em>none</em>
 </td>
 <td>
-
-*none*
+<br>
+<em>none</em>
 </td>
 </tr>
-
 <tr>
 <td>
 <pre>
@@ -80,8 +78,8 @@ State: {{ $door_open }}
 </pre>
 </td>
 <td>
-
-*none*
+<br>
+<em>none</em>
 </td>
 <td>
 <pre>

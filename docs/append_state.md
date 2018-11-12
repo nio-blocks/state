@@ -1,6 +1,6 @@
 AppendState
 ===========
-This block has two inputs, the `setter` behaves like and is configured exactly like a [StateChange](state_change.md) block, and its current **State** is appened to every signal processed by the `getter` input. That is to say, the `setter` *sets* a **State**, and the `getter` *gets* the current **State** for the same `group`.
+This block has two inputs, the `setter` behaves like and is configured exactly like a [StateChange](https://blocks.n.io/StateChange) block, and its current **State** is appened to every signal processed by the `getter` input. That is to say, the `setter` *sets* a **State**, and the `getter` *gets* the current **State** for the same `group`.
 
 See Also: [MergeStreams](https://blocks.n.io/MergeStreams)
 
@@ -21,17 +21,16 @@ In this example, the last value from one stream is added to signals from another
 ```
 State: {{ $numbers }}
 ```
-<table>
+<table width=100%>
 <tr>
 <th>Incoming Signals, Getter</th>
 <th>Incoming Signals, Setter</th>
 <th>Outgoing Signals</th>
 </tr>
-
 <tr>
 <td>
-
-*none*
+<br>
+<em>none</em>
 </td>
 <td>
 <pre>
@@ -43,11 +42,10 @@ State: {{ $numbers }}
 </pre>
 </td>
 <td>
-
-*none*
+<br>
+<em>none</em>
 </td>
 </tr>
-
 <tr>
 <td>
 <pre>
@@ -59,8 +57,8 @@ State: {{ $numbers }}
 </pre>
 </td>
 <td>
-
-*none*
+<br>
+<em>none</em>
 </td>
 <td>
 <pre>
@@ -73,7 +71,6 @@ State: {{ $numbers }}
 </pre>
 </td>
 </tr>
-
 <tr>
 <td>
 <pre>
@@ -85,8 +82,8 @@ State: {{ $numbers }}
 </pre>
 </td>
 <td>
-
-*none*
+<br>
+<em>none</em>
 </td>
 <td>
 <pre>
@@ -99,11 +96,10 @@ State: {{ $numbers }}
 </pre>
 </td>
 </tr>
-
 <tr>
 <td>
-
-*none*
+<br>
+<em>none</em>
 </td>
 <td>
 <pre>
@@ -115,11 +111,10 @@ State: {{ $numbers }}
 </pre>
 </td>
 <td>
-
-*none*
+<br>
+<em>none</em>
 </td>
 </tr>
-
 <tr>
 <td>
 <pre>
@@ -131,8 +126,8 @@ State: {{ $numbers }}
 </pre>
 </td>
 <td>
-
-*none*
+<br>
+<em>none</em>
 </td>
 <td>
 <pre>
@@ -154,17 +149,16 @@ Group By: {{ $freezer }}
 State: {{ $temp_C }}
 State Name: temp_C
 ```
-<table>
+<table width=100%>
 <tr>
 <th>Incoming Signals, Getter</th>
 <th>Incoming Signals, Setter</th>
 <th>Outgoing Signals</th>
 </tr>
-
 <tr>
 <td>
-
-*none*
+<br>
+<em>none</em>
 </td>
 <td>
 <pre>
@@ -185,11 +179,10 @@ State Name: temp_C
 </pre>
 </td>
 <td>
-
-*none*
+<br>
+<em>none</em>
 </td>
 </tr>
-
 <tr>
 <td>
 <pre>
@@ -202,8 +195,8 @@ State Name: temp_C
 </pre>
 </td>
 <td>
-
-*none*
+<br>
+<em>none</em>
 </td>
 <td>
 <pre>
