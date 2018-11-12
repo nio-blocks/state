@@ -7,7 +7,7 @@ Properties
 - **State**: This evaluation sets the current state.
 - **Initial State**: Evaluation to use for the current state (all groups) when the block starts, before any signals have been processed. Superseded by values loaded from persistence, if applicable.
 - **Group By**: Expression which defines a signal's `group`, a **State** is maintained for every unique group processed.
-- **Excude Existing Fields**: If checked (True) incoming signals will be discarded, and outoging signals will contain only the results of the **State** evaluation.
+- **Exclude Existing Fields**: If checked (True) incoming signals will be discarded, and outoging signals will contain only the results of the **State** evaluation.
 
 Advanced Properties
 -------------------
