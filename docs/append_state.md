@@ -35,9 +35,7 @@ State: {{ $numbers }}
 <td>
 <pre>
 [
-  {
-    "numbers": 0
-  }
+  {"numbers": 0}
 ]
 </pre>
 </td>
@@ -50,9 +48,7 @@ State: {{ $numbers }}
 <td>
 <pre>
 [
-  {
-    "letters": "A"
-  }
+  {"letters": "A"}
 ]
 </pre>
 </td>
@@ -63,10 +59,7 @@ State: {{ $numbers }}
 <td>
 <pre>
 [
-  {
-    "letters": "A",
-    "state": 0
-  }
+  {"letters": "A", "state": 0}
 ]
 </pre>
 </td>
@@ -75,9 +68,7 @@ State: {{ $numbers }}
 <td>
 <pre>
 [
-  {
-    "letters": "B"
-  }
+  {"letters": "B"}
 ]
 </pre>
 </td>
@@ -88,10 +79,7 @@ State: {{ $numbers }}
 <td>
 <pre>
 [
-  {
-    "letters": "B",
-    "state": 0
-  }
+  {"letters": "B", "state": 0}
 ]
 </pre>
 </td>
@@ -104,9 +92,7 @@ State: {{ $numbers }}
 <td>
 <pre>
 [
-  {
-    "numbers": 1
-  }
+  {"numbers": 1}
 ]
 </pre>
 </td>
@@ -119,9 +105,7 @@ State: {{ $numbers }}
 <td>
 <pre>
 [
-  {
-    "letters": "C"
-  }
+  {"letters": "C"}
 ]
 </pre>
 </td>
@@ -132,10 +116,7 @@ State: {{ $numbers }}
 <td>
 <pre>
 [
-  {
-    "letters": "C",
-    "state": 1
-  }
+  {"letters": "C", "state": 1}
 ]
 </pre>
 </td>
@@ -163,18 +144,9 @@ State Name: temp_C
 <td>
 <pre>
 [
-  {
-    "freezer": 1,
-    "temp_C": -1.0
-  },
-  {
-    "freezer": 2,
-    "temp_C": -2.0
-  },
-  {
-    "freezer": 3,
-    "temp_C": -3.0
-  }
+  {"freezer": 1, "temp_C": -1.0},
+  {"freezer": 2, "temp_C": -2.0},
+  {"freezer": 3, "temp_C": -3.0}
 ]
 </pre>
 </td>
@@ -187,10 +159,7 @@ State Name: temp_C
 <td>
 <pre>
 [
-  {
-    "freezer": 1,
-    "door_open": True
-  }
+  {"freezer": 1, "door_open": True}
 ]
 </pre>
 </td>
@@ -201,11 +170,7 @@ State Name: temp_C
 <td>
 <pre>
 [
-  {
-    "freezer": 1,
-    "door_open": True,
-    "temp_C": -1.0
-  }
+  {"freezer": 1, "door_open": True, "temp_C": -1.0}
 ]
 </pre>
 </td>

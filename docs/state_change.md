@@ -31,21 +31,14 @@ Exclude Existing Fields: False
 <td>
 <pre>
 [
-  {
-    "temp_C": -2.0
-  }
+  {"temp_C": -2.0}
 ]
 </pre>
 </td>
 <td>
 <pre>
 [
-  {
-    "group": None,
-    "state": False,
-    "prev_state": None,
-    "temp_C: -2.0
-  }
+  {"group": None, "state": False, "prev_state": None, "temp_C: -2.0}
 ]
 </pre>
 </td>
@@ -54,9 +47,7 @@ Exclude Existing Fields: False
 <td>
 <pre>
 [
-  {
-    "temp_C": -1.0
-  }
+  {"temp_C": -1.0}
 ]
 </pre>
 </td>
@@ -69,21 +60,14 @@ Exclude Existing Fields: False
 <td>
 <pre>
 [
-  {
-    "temp_C": 1.0
-  }
+  {"temp_C": 1.0}
 ]
 </pre>
 </td>
 <td>
 <pre>
 [
-  {
-    "group": None,
-    "state": True,
-    "prev_state": False,
-    "temp_C: 1.0
-  }
+  {"group": None, "state": True, "prev_state": False, "temp_C: 1.0}
 ]
 </pre>
 </td>
@@ -108,29 +92,16 @@ Exclude Existing Fields: True
 <td>
 <pre>
 [
-  {
-    "freezer": 1,
-    "temp_C": 1.0
-  },
-  {
-    "freezer": 2,
-    "temp_C": -2.0
-  },
-  {
-    "freezer": 3,
-    "temp_C": -3.0
-  }
+  {"freezer": 1, "temp_C": 1.0},
+  {"freezer": 2, "temp_C": -2.0},
+  {"freezer": 3, "temp_C": -3.0}
 ]
 </pre>
 </td>
 <td>
 <pre>
 [
-  {
-    "group": 1,
-    "out_of_spec": True,
-    "prev_state": False
-  }
+  {"group": 1, "out_of_spec": True, "prev_state": False}
 ]
 </pre>
 </td>

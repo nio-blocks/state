@@ -34,18 +34,9 @@ State: {{ $door_open }}
 <td>
 <pre>
 [
-  {
-    "freezer": 1,
-    "door_open": True
-  },
-  {
-    "freezer": 2,
-    "door_open": False
-  },
-  {
-    "freezer": 3,
-    "door_open": False
-  }
+  {"freezer": 1, "door_open": True},
+  {"freezer": 2, "door_open": False},
+  {"freezer": 3, "door_open": False}
 ]
 </pre>
 </td>
@@ -62,18 +53,9 @@ State: {{ $door_open }}
 <td>
 <pre>
 [
-  {
-    "freezer": 1,
-    "temp_C": -1.0
-  },
-  {
-    "freezer": 2,
-    "temp_C": -2.0
-  },
-  {
-    "freezer": 3,
-    "temp_C": -3.0
-  }
+  {"freezer": 1, "temp_C": -1.0},
+  {"freezer": 2, "temp_C": -2.0},
+  {"freezer": 3, "temp_C": -3.0}
 ]
 </pre>
 </td>
@@ -84,24 +66,15 @@ State: {{ $door_open }}
 <td>
 <pre>
 [
-  {
-    "freezer": 1,
-    "temp_C": -1.0
-  }
+  {"freezer": 1, "temp_C": -1.0}
 ]
 </pre>
 </td>
 <td>
 <pre>
 [
-  {
-    "freezer": 2,
-    "temp_C": -2.0
-  },
-  {
-    "freezer": 3,
-    "temp_C": -3.0
-  }
+  {"freezer": 2, "temp_C": -2.0},
+  {"freezer": 3, "temp_C": -3.0}
 ]
 </pre>
 </td>
