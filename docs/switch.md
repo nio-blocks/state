@@ -14,7 +14,7 @@ Advanced Properties
 
 Examples
 --------
-In this example, the temperature value from a freezer is "turned on" only while the door is open, and we can use **Group By** to match up streams from doors and temps:
+In this example, the temperature stream from a freezer is "turned on" only while the door is open, and we can use **Group By** to match up streams from doors and temps:
 ```
 Group By: {{ $freezer }}
 State: {{ $door_open }}
