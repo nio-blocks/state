@@ -1,6 +1,6 @@
 {
   "nio/AppendState": {
-    "description": "",
+    "description": "Add the result of a state evaluation onto incoming signals.",
     "categories": [
       "Signal Modifier"
     ],
@@ -9,7 +9,7 @@
     "from_python": "append_state_block.AppendState"
   },
   "nio/StateChange": {
-    "description": "",
+    "description": "Evaluate the state of stream of data.",
     "categories": [
       "Signal Modifier"
     ],
@@ -18,9 +18,9 @@
     "from_python": "state_change_block.StateChange"
   },
   "nio/Switch": {
-    "description": "",
+    "description": "Redirect signal flow based on a state evaluation.",
     "categories": [
-      "Signal Modifier"
+      "Signal Flow"
     ],
     "tags": "toggle",
     "from_readme": "docs/switch.md",
