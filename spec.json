@@ -4,7 +4,7 @@
     "categories": [
       "Signal Modifier"
     ],
-    "tags": "",
+    "tags": "merge combine",
     "from_readme": "docs/append_state.md",
     "from_python": "append_state_block.AppendState"
   },
@@ -22,7 +22,7 @@
     "categories": [
       "Signal Modifier"
     ],
-    "tags": "",
+    "tags": "toggle",
     "from_readme": "docs/switch.md",
     "from_python": "switch_block.Switch"
   }
