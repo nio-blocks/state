@@ -1,230 +1,29 @@
 {
   "nio/AppendState": {
-    "version": "0.2.0",
-    "description": "The AppendState block adds a 'state' attribute to the `getter` input signal.  The block appends an attribute from `setter` signal to the `getter` input signal, and will the output signal will also include a `prev_state` attribute of the block's previous state. The state's attribute name can be configured with the `State Name` property, and the value is assigned based on the expression in the `State` property.",
+    "description": "Add the result of a state evaluation onto incoming signals.",
     "categories": [
       "Signal Modifier"
     ],
-    "properties": {
-      "backup_interval": {
-        "title": "Backup Interval",
-        "type": "TimeDeltaType",
-        "description": "An interval of time that specifies how often persisted data is saved.",
-        "default": {
-          "seconds": 3600
-        }
-      },
-      "group_by": {
-        "title": "Group By",
-        "type": "Type",
-        "description": "The signal attribute on the incoming signal whose values will be used to define groups on the outgoing signal.",
-        "default": null
-      },
-      "initial_state": {
-        "title": "Initial State",
-        "type": "Type",
-        "description": "The state when none has been set by an incoming signal. If the `initial_state` is a python expression, it is evaluated at configuration. For example, if the `initial_state` is configured as `{{ datetime.datetime.utctime() }}`, the value of `initial_state` will the be time at configuration.",
-        "default": "{{ None }}"
-      },
-      "load_from_persistence": {
-        "title": "Load from Persistence?",
-        "type": "BoolType",
-        "description": "If `True`, the block’s state will be saved when the block is stopped, and reloaded once the block is restarted.",
-        "default": true
-      },
-      "state_expr": {
-        "title": "State",
-        "type": "Type",
-        "description": "Property used to assign a state. If the expression cannot be evaluated, the state will not change.",
-        "default": "{{ $state }}"
-      },
-      "state_name": {
-        "title": "State Name",
-        "type": "StringType",
-        "description": "String property that is the name of the signal attribute for the appended state.",
-        "default": "state"
-      }
-    },
-    "inputs": {
-      "getter": {
-        "description": "Any list of signals. These signals will get assigned a state and/or pass through the block."
-      },
-      "setter": {
-        "description": "Signals passed to this input set the state of the block. Each signal is evaluated against `state_expr` to determine the new state of the block for the signal's group."
-      }
-    },
-    "outputs": {
-      "default": {
-        "description": "The original signal along with the configured `state_name` attribute and the `prev_state` attribute."
-      }
-    },
-    "commands": {
-      "current_state": {
-        "params": {
-          "group": {
-            "allow_none": true,
-            "title": "group",
-            "default": null
-          }
-        },
-        "description": "Get the current state of the block is applying to the signals."
-      },
-      "groups": {
-        "params": {},
-        "description": "Display the current groupings of signals."
-      }
-    }
+    "tags": "merge combine",
+    "from_readme": "docs/append_state.md",
+    "from_python": "append_state_block.AppendState"
   },
   "nio/StateChange": {
-    "version": "0.2.0",
-    "description": "The StateChange block maintains a state based on an attribute of the input signal.  When the state changes, a signal is emitted that contains the `state` and `prev_state`.",
+    "description": "Evaluate the state of stream of data.",
     "categories": [
-      "Signal Flow"
+      "Signal Modifier"
     ],
-    "properties": {
-      "backup_interval": {
-        "title": "Backup Interval",
-        "type": "TimeDeltaType",
-        "description": "An interval of time that specifies how often persisted data is saved.",
-        "default": {
-          "seconds": 3600
-        }
-      },
-      "exclude": {
-        "title": "Exclude Existing Fields",
-        "type": "BoolType",
-        "description": "If checked (true), the original signal sent into the block will be excluded from the signal sent out of the block. If unchecked (false), the output signal will include the original signal sent into the block.",
-        "default": true
-      },
-      "group_by": {
-        "title": "Group By",
-        "type": "Type",
-        "description": "The signal attribute on the incoming signal whose values will be used to define groups on the outgoing signal.",
-        "default": null
-      },
-      "initial_state": {
-        "title": "Initial State",
-        "type": "Type",
-        "description": "The state when none has been set by an incoming signal. If the `initial_state` is a python expression, it is evaluated at configuration. For example, if the `initial_state` is configured as `{{ datetime.datetime.utctime() }}`, the value of `initial_state` will the be time at configuration.",
-        "default": "{{ None }}"
-      },
-      "load_from_persistence": {
-        "title": "Load from Persistence?",
-        "type": "BoolType",
-        "description": "If `True`, the block’s state will be saved when the block is stopped, and reloaded once the block is restarted.",
-        "default": true
-      },
-      "state_expr": {
-        "title": "State",
-        "type": "Type",
-        "description": "Property used to assign a state and be monitored for a change in value. If the expression cannot be evaluated, the state will not change.",
-        "default": "{{ $state }}"
-      },
-      "state_name": {
-        "title": "State Name",
-        "type": "StringType",
-        "description": "String property that is the name of the signal attribute for the state.",
-        "default": "state"
-      }
-    },
-    "inputs": {
-      "default": {
-        "description": "Signal with attribute to be set and watched as state."
-      }
-    },
-    "outputs": {
-      "default": {
-        "description": "When state changes, a signal is notified with attributes `state`, `prev_state`, and `group`. If `exclude` is _unchecked_ then the signal that changed the state will have the attributes added to it."
-      }
-    },
-    "commands": {
-      "current_state": {
-        "params": {
-          "group": {
-            "allow_none": true,
-            "title": "group",
-            "default": null
-          }
-        },
-        "description": "Get the current state of the block is applying to the signals."
-      },
-      "groups": {
-        "params": {},
-        "description": "Display the current groupings of signals."
-      }
-    }
+    "tags": "",
+    "from_readme": "docs/state_change.md",
+    "from_python": "state_change_block.StateChange"
   },
   "nio/Switch": {
-    "version": "0.2.0",
-    "description": "The Switch block emits signals from either the True or False output terminal based on what the `State` expression evaluates to.  The `getter` input signal is what gets passed along, and the `setter` input signal is used to determine the state.",
+    "description": "Redirect signal flow based on a state evaluation.",
     "categories": [
       "Signal Flow"
     ],
-    "properties": {
-      "backup_interval": {
-        "title": "Backup Interval",
-        "type": "TimeDeltaType",
-        "description": "An interval of time that specifies how often persisted data is saved.",
-        "default": {
-          "seconds": 3600
-        }
-      },
-      "group_by": {
-        "title": "Group By",
-        "type": "Type",
-        "description": "The signal attribute on the incoming signal whose values will be used to define groups on the outgoing signal.",
-        "default": null
-      },
-      "initial_state": {
-        "title": "Initial State",
-        "type": "Type",
-        "description": "The state when none has been set by an incoming signal. If the `initial_state` is a python expression, it is evaluated at configuration. For example, if the `initial_state` is configured as `{{ datetime.datetime.utctime() }}`, the value of `initial_state` will the be time at configuration.",
-        "default": "{{ None }}"
-      },
-      "load_from_persistence": {
-        "title": "Load from Persistence?",
-        "type": "BoolType",
-        "description": "If `True`, the block’s state will be saved when the block is stopped, and reloaded once the block is restarted.",
-        "default": true
-      },
-      "state_expr": {
-        "title": "State",
-        "type": "Type",
-        "description": "Property that evaluates to a true or false state. If the expression cannot be evaluated, the state will not change.",
-        "default": "{{ $state }}"
-      }
-    },
-    "inputs": {
-      "getter": {
-        "description": "Any list of signals. Signals that get assigned a state and/or pass through the block."
-      },
-      "setter": {
-        "description": "Signals passed to this input set the state of the block. Each signal is evaluated against `state_expr` to determine the new state of the block for the signal's group."
-      }
-    },
-    "outputs": {
-      "false": {
-        "description": "getter signals pass through to the false output by default until state is changed to `True`."
-      },
-      "true": {
-        "description": "getter signals pass through to the true output if the last setter signal set the state to `True`."
-      }
-    },
-    "commands": {
-      "current_state": {
-        "params": {
-          "group": {
-            "allow_none": true,
-            "title": "group",
-            "default": null
-          }
-        },
-        "description": "Get the current state of the block is applying to the signals."
-      },
-      "groups": {
-        "params": {},
-        "description": "Display the current groupings of signals."
-      }
-    }
+    "tags": "toggle",
+    "from_readme": "docs/switch.md",
+    "from_python": "switch_block.Switch"
   }
 }

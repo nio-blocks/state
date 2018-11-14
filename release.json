@@ -1,17 +1,17 @@
 {
   "nio/AppendState": {
     "language": "Python",
-    "url": "git://github.com/nio-blocks/state.git",
-    "version": "0.2.0"
+    "from_python": "append_state_block.AppendState",
+    "url": "git://github.com/nio-blocks/state.git"
   },
   "nio/StateChange": {
     "language": "Python",
-    "url": "git://github.com/nio-blocks/state.git",
-    "version": "0.2.0"
+    "from_python": "state_change_block.StateChange",
+    "url": "git://github.com/nio-blocks/state.git"
   },
   "nio/Switch": {
     "language": "Python",
-    "url": "git://github.com/nio-blocks/state.git",
-    "version": "0.2.0"
+    "from_python": "switch_block.Switch",
+    "url": "git://github.com/nio-blocks/state.git"
   }
 }
